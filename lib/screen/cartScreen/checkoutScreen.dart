@@ -213,12 +213,12 @@ class _CheckOutState extends State<CheckOut> {
                   Icons.edit,
                 ),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => updateShippingAddress(),
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => updateShippingAddress(),
+                  //   ),
+                 // );
                 },
               ),
             ],

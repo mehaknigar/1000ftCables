@@ -87,15 +87,15 @@ class _MainDrawerState extends State<MainDrawer> {
                             user.password != null) {
                                ScopedModel.of<MainModel>(context).setLoggedInUser(user);
                                PreferenceManager.saveDetails(user);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>Accounts (
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) =>Accounts (
                                 
-                                //code: _formData['billingdetail']['s_zipcode'],
-                              ),
-                            ),
-                          );
+                          //       //code: _formData['billingdetail']['s_zipcode'],
+                          //     ),
+                          //   ),
+                          // );
                         } else
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) => Login()));
