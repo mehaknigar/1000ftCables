@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter_cable/model/user.dart';
 import 'package:flutter_cable/screen/productPages/myOrdersScreen.dart';
-import 'package:flutter_cable/screen/userScreen/updateBSAddressScreen.dart';
 import 'package:flutter_cable/widgets/PaymentMethods/SquarePayment.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter/material.dart';
@@ -9,16 +8,13 @@ import 'package:flutter_cable/model/CartItem.dart';
 import 'package:flutter_cable/scoped-models/Model.dart';
 import 'package:flutter_cable/widgets/preference.dart';
 import 'package:http/http.dart' as http;
- 
 
 class CheckOut extends StatefulWidget {
   final MainModel model;
   final total;
   final totalPayable;
   final tax;
-  CheckOut({this.model,this.total,this.totalPayable,this.tax});
-
-   
+  CheckOut({this.model, this.total, this.totalPayable, this.tax});
 
   @override
   _CheckOutState createState() => _CheckOutState();
@@ -30,14 +26,13 @@ class _CheckOutState extends State<CheckOut> {
   User user;
   //var product;
   Map<String, dynamic> _formData = {};
- 
-    
+
   void initState() {
     super.initState();
     widget.model.getCart(updateCartItem: false);
     model = ScopedModel.of<MainModel>(context);
-     _formData['subTotal'] = model.getCartSubTotal;
-      _formData['TotalAmount'] = widget.totalPayable;
+    _formData['subTotal'] = model.getCartSubTotal;
+    _formData['TotalAmount'] = widget.totalPayable;
     _formData['productList'] =
         model.cartItemList.map((c) => c.toJson()).toList();
     _formData['user'] = model.getLoggedInUser;
@@ -46,10 +41,7 @@ class _CheckOutState extends State<CheckOut> {
     PreferenceManager.getDetails().then((user) {
       _formData['user'] = user.toJson();
     });
-    
   }
-
-   
 
   Future fetchData() async {
     final response = await http.get(
@@ -63,15 +55,11 @@ class _CheckOutState extends State<CheckOut> {
     }
   }
 
-  
-
   void addData(Map<String, dynamic> body) async {
     var url = "https://1000ftcables.com/appdata/order.php";
     var response = await http.post(url, body: jsonEncode(body));
     print(response.body);
   }
-
-   
 
   @override
   Widget build(BuildContext context) {
@@ -80,96 +68,70 @@ class _CheckOutState extends State<CheckOut> {
         title: Text("Payment"),
       ),
       body: Container(
-              child: Column(
-                children: <Widget>[
-                  Expanded(
-                    child: ScopedModelDescendant(
-                      builder: (BuildContext context, Widget child,
-                          MainModel model) {
-                        if (model.isLoading) {
-                          return Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                        if (model.getCartItems.length == 0) {
-                          return Center(
-                            child: Text('No item in cart.'),
-                          );
-                        }
-                        return _buildCartList(
-                            context, model.getCartItems, model);
-                      },
-                    ),
-                  ),
-                  // ScopedModelDescendant(
-                  //   builder:
-                  //       (BuildContext context, Widget child, MainModel model) {
-                  //     if (model.isLoading) {
-                  //       return Center(
-                  //         child: CircularProgressIndicator(),
-                  //       );
-                  //     }
-                  //     if (model.getCartItems.length == 0) {
-                  //       return Center(
-                  //           //child: Text('No item in cart.'),
-                  //           );
-                  //     }
-                  //     // return _shippingTotal(
-                  //     //   // total: getTotal.toString(),
-                  //     //   // totalPayable: getTotalPayableAmount.toString(),
-                  //     //   // tax: getCalculatedGST.toString(),
-                  //     //   // shipping: getShippingRates.toString(),
-                  //     // );
-
-                  //     //return _shippingTotal( getTotal.toString(), getTotalPayableAmount.toString(), getCalculatedGST.toString());
-                  //   },
-                  // ),
-                ],
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: ScopedModelDescendant(
+                builder: (BuildContext context, Widget child, MainModel model) {
+                  if (model.isLoading) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (model.getCartItems.length == 0) {
+                    return Center(
+                      child: Text('No item in cart.'),
+                    );
+                  }
+                  return _buildCartList(context, model.getCartItems, model);
+                },
               ),
             ),
+          ],
+        ),
+      ),
       bottomNavigationBar: BottomAppBar(
         // color: Colors.blue,
         child: SizedBox(
-      height: 50,
-      child: Container(
-        color: Colors.blue,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            //SizedBox(width: 24),
-            ScopedModelDescendant(
-              builder: (BuildContext context, Widget child, MainModel model) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Text(
-                      "CA State Tax(9.25): \$" 
-                      + widget.tax,
-                      
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 11,
-                      ),
-                    ),
-                    Text(
-                      'Total: \$' +_formData['TotalAmount'],
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  ],
-                );
-              },
-            ),
-             Column(
+          height: 50,
+          child: Container(
+            color: Colors.blue,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                //SizedBox(width: 24),
+                ScopedModelDescendant(
+                  builder:
+                      (BuildContext context, Widget child, MainModel model) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Text(
+                          "CA State Tax(9.25): \$" + widget.tax,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 11,
+                          ),
+                        ),
+                        Text(
+                          'Total: \$' + _formData['TotalAmount'],
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      ],
+                    );
+                  },
+                ),
+                Column(
                   children: <Widget>[
                     FlatButton(
                       onPressed: () {
-                         addData(_formData);
-                         _showDialog();
-                         print(_formData);
+                        addData(_formData);
+                        _showDialog();
+                        print(_formData);
                       },
                       color: Colors.white,
                       child: Text(
@@ -181,11 +143,10 @@ class _CheckOutState extends State<CheckOut> {
                     ),
                   ],
                 ),
-               
-          ],
+              ],
+            ),
+          ),
         ),
-      ),
-    ),
       ),
     );
   }
@@ -218,7 +179,7 @@ class _CheckOutState extends State<CheckOut> {
                   //   MaterialPageRoute(
                   //     builder: (context) => updateShippingAddress(),
                   //   ),
-                 // );
+                  // );
                 },
               ),
             ],
@@ -255,34 +216,6 @@ class _CheckOutState extends State<CheckOut> {
             ),
           ),
         ),
-        // GestureDetector(
-        //   onTap: () {
-        //     Navigator.push(
-        //       context,
-        //       MaterialPageRoute(
-        //         builder: (context) => stripeMethod(),
-        //       ),
-        //     );
-        //   },
-        //   child: ListTile(
-        //     title: Text("Stripe Payment"),
-        //     leading: Icon(Icons.payment),
-        //   ),
-        // ),
-        // GestureDetector(
-        //   onTap: () {
-        //     Navigator.push(
-        //       context,
-        //       MaterialPageRoute(
-        //         builder: (context) => Pay(),
-        //       ),
-        //     );
-        //   },
-        //   child: ListTile(
-        //     title: Text("Braintree payent"),
-        //     leading: Icon(Icons.payment),
-        //   ),
-        // ),
         GestureDetector(
           onTap: () {
             Navigator.push(
@@ -297,7 +230,7 @@ class _CheckOutState extends State<CheckOut> {
             leading: Icon(Icons.payment),
           ),
         ),
-         Container(
+        Container(
             margin: EdgeInsets.only(
               left: 20,
               top: 20,
@@ -310,98 +243,6 @@ class _CheckOutState extends State<CheckOut> {
               ),
             )),
         ...cartItemList.map((c) => _cartItemCard(c)).toList(),
-        // Card(
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //     children: <Widget>[
-        //       Container(
-        //         padding: EdgeInsets.only(left: 10, right: 10),
-        //         child: Text(
-        //           ' Sub Total + Shipping fee',
-        //           style: TextStyle(
-        //             fontSize: 15,
-        //             fontWeight: FontWeight.bold,
-        //             color: Colors.black,
-        //           ),
-        //         ),
-        //       ),
-        //       Container(
-        //         padding:
-        //             EdgeInsets.only(left: 10, top: 15, bottom: 15, right: 20),
-        //         child: Text(  
-        //           "\$" +widget.total,
-        //            style: TextStyle(
-        //             fontSize: 18,
-        //             fontWeight: FontWeight.bold,
-        //             color: Colors.black,
-        //           ),
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
-        // Card(
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //     children: <Widget>[
-        //       Container(
-        //         padding: EdgeInsets.only(left: 10, right: 10),
-        //         child: Text(
-        //           'CA State Tax(9.25)',
-        //           style: TextStyle(
-        //             fontSize: 15,
-        //             fontWeight: FontWeight.bold,
-        //             color: Colors.black,
-        //           ),
-        //         ),
-        //       ),
-        //       Container(
-        //         padding:
-        //             EdgeInsets.only(left: 10, top: 15, bottom: 15, right: 20),
-        //         child: Text(
-        //           "\$" + widget.tax,
-                  
-        //           style: TextStyle(
-        //             fontSize: 18,
-        //             fontWeight: FontWeight.bold,
-        //             color: Colors.black,
-        //           ),
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
-        // Card(
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //     children: <Widget>[
-        //       Container(
-        //         padding: EdgeInsets.only(left: 10, right: 10),
-        //         child: Text(
-        //           'Total',
-        //           style: TextStyle(
-        //             fontSize: 15,
-        //             fontWeight: FontWeight.bold,
-        //             color: Colors.black,
-        //           ),
-        //         ),
-        //       ),
-        //       Container(
-        //         padding:
-        //             EdgeInsets.only(left: 10, top: 15, bottom: 15, right: 20),
-        //         child: Text(
-        //           "\$" +widget.totalPayable,
-        //           style: TextStyle(
-        //             fontSize: 18,
-        //             fontWeight: FontWeight.bold,
-        //             color: Colors.black,
-        //           ),
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
-         
       ],
     );
   }
@@ -420,7 +261,8 @@ class _CheckOutState extends State<CheckOut> {
                     Container(
                       margin: const EdgeInsets.only(right: 0, left: 0),
                       child: Image.network(
-                        'https://www.1000ftcables.com/images/detailed/2/'+ cartItem.image,
+                        'https://www.1000ftcables.com/images/detailed/2/' +
+                            cartItem.image,
                         width: 90,
                         height: 90,
                       ),
@@ -473,35 +315,6 @@ class _CheckOutState extends State<CheckOut> {
                                 ),
                               ],
                             )),
-                        // Container(
-                        //   margin: EdgeInsets.only(
-                        //     left: 40,
-                        //     right: 10,
-                        //     top: 10,
-                        //   ),
-                        //   child: Row(
-                        //     children: <Widget>[
-                        //       MinusPlus(
-                        //         quantity: cartItem.quantity,
-                        //         onDecrease: () {
-                        //           if (cartItem.quantity > 1) {
-                        //             setState(() {
-                        //               cartItem.quantity -= 1;
-                        //             });
-                        //             widget.model
-                        //                 .updateCartItemQuantity(cartItem);
-                        //           }
-                        //         },
-                        //         onIncrease: () {
-                        //           setState(() {
-                        //             cartItem.quantity += 1;
-                        //           });
-                        //           widget.model.updateCartItemQuantity(cartItem);
-                        //         },
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
                       ],
                     ),
                     Row(
@@ -578,88 +391,3 @@ class _CheckOutState extends State<CheckOut> {
     );
   }
 }
-
-
-
-
-// class _shippingTotal extends StatelessWidget {
-
-    
-//   // final String total;
-//   // final String tax;
-//   // final String totalPayable;
-//   // final String shipping;
-//   // _shippingTotal({this.total, this.tax, this.totalPayable, this.shipping});
-//   @override
-//   Widget build(BuildContext context) {
-//     return SizedBox(
-//       height: 50,
-//       child: Container(
-//         color: Colors.blue,
-//         child: Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceAround,
-//           children: [
-//             //SizedBox(width: 24),
-//             ScopedModelDescendant(
-//               builder: (BuildContext context, Widget child, MainModel model) {
-//                 return Column(
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   children: <Widget>[
-//                     Text(
-//                       "Shipping:  \$" + shipping,
-//                       style: TextStyle(
-//                         color: Colors.white,
-//                         fontSize: 11,
-//                       ),
-//                     ),
-//                     Text(
-//                       'Total: \$' +_formData['TotalAmount'],
-//                       style: TextStyle(
-//                         color: Colors.white,
-//                         fontSize: 18,
-//                         fontWeight: FontWeight.bold,
-//                       ),
-//                     )
-//                   ],
-//                 );
-//               },
-//             ),
-//             ScopedModelDescendant(
-//               builder: (BuildContext context, Widget child, MainModel model) {
-//                 return Column(
-//                   children: <Widget>[
-//                     FlatButton(
-//                       onPressed: () {
-//                         Navigator.push(
-//                           context,
-//                           MaterialPageRoute(
-//                             builder: (context) => CheckOut(
-//                               model: model,
-//                               total: total,
-//                               totalPayable: totalPayable,
-//                               tax: tax,
-//                             ),
-//                           ),
-//                         );
-//                       },
-//                       color: Colors.white,
-//                       child: Text(
-//                         'Place Order',
-//                         style: TextStyle(
-//                           color: Colors.blue,
-//                         ),
-//                       ),
-//                     ),
-//                   ],
-//                 );
-//               },
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-
- 

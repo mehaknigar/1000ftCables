@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cable/model/Product.dart';
 import 'package:flutter_cable/model/user.dart';
 import 'package:flutter_cable/scoped-models/Model.dart';
 import 'package:flutter_cable/tab_bar_views/description.dart';
-import 'package:flutter_cable/tab_bar_views/feature.dart';
 import 'package:flutter_cable/tab_bar_views/share.dart';
 import 'package:flutter_cable/screen/cartScreen/cartScreen.dart';
 import 'package:flutter_cable/screen/productPages/shopnowScreen.dart';
-import 'package:flutter_cable/widgets/minusPlus.dart';
+import 'package:flutter_cable/widgets/ipaddress.dart';
 import 'package:http/http.dart' as http;
 import 'package:scoped_model/scoped_model.dart';
 
@@ -17,7 +17,8 @@ class Details extends StatefulWidget {
   final String productID;
   final String listPrice;
   final String price;
-  Details(this.productID, this.listPrice,this.price);
+  final String imgLink;
+  Details(this.productID, this.listPrice, this.price,this.imgLink);
   @override
   _DetailsState createState() => _DetailsState();
 }
@@ -31,11 +32,12 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
   User user;
   MainModel model;
   Product product;
+  
 
   void initState() {
     _scrollController = ScrollController();
     super.initState();
-    _tabController = TabController(vsync: this, length: 3);
+    _tabController = TabController(vsync: this, length: 2);
 
     this.fetchData();
     this.fetchFeatures();
@@ -43,7 +45,6 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
     model = ScopedModel.of<MainModel>(context);
     model.getCart(updateCartItem: false);
   }
-
 
   // get discount {
   //   return double.parse(widget.listPrice - widget.price);
@@ -111,6 +112,7 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
                       context,
                       MaterialPageRoute(
                         builder: (context) => Cart(
+                         
                           model: model,
                         ),
                       ),
@@ -121,7 +123,7 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
             ),
             new FlatButton(
               child: new Text(
-                "Continue Shopping",
+                "Continue",
                 style: TextStyle(
                     fontSize: 17.0,
                     color: Colors.red,
@@ -155,28 +157,30 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     product = ScopedModel.of<MainModel>(context).getSelectedProduct;
     return Scaffold(
-      appBar: AppBar(title: Text(product.product), 
-      // actions: <Widget>[
-      //   ScopedModelDescendant(
-      //     builder: (BuildContext context, Widget child, MainModel model) {
-      //       return IconButton(
-      //         onPressed: () => Navigator.push(
-      //           context,
-      //           MaterialPageRoute(
-      //             builder: (context) => Cart(
-      //               model: model,
-      //             ),
-      //           ),
-      //         ),
-      //         icon: Icon(
-      //           Icons.add_shopping_cart,
-      //           color: Colors.white,
-      //           size: 30,
-      //         ),
-      //       );
-      //     },
-      //   )
-      // ]
+      appBar: AppBar(
+        title: Text(product.product),
+        backgroundColor: appBarColor,
+        // actions: <Widget>[
+        //   ScopedModelDescendant(
+        //     builder: (BuildContext context, Widget child, MainModel model) {
+        //       return IconButton(
+        //         onPressed: () => Navigator.push(
+        //           context,
+        //           MaterialPageRoute(
+        //             builder: (context) => Cart(
+        //               model: model,
+        //             ),
+        //           ),
+        //         ),
+        //         icon: Icon(
+        //           Icons.add_shopping_cart,
+        //           color: Colors.white,
+        //           size: 30,
+        //         ),
+        //       );
+        //     },
+        //   )
+        // ]
       ),
       body: NestedScrollView(
         controller: _scrollController,
@@ -197,14 +201,14 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
             controller: _tabController,
             children: <Widget>[
               Description(product.fullDescription),
-              ListView.builder(
-                itemCount: feature.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    child: Feature(feature[index]['variant']),
-                  );
-                },
-              ),
+              // ListView.builder(
+              //   itemCount: feature.length,
+              //   itemBuilder: (BuildContext context, int index) {
+              //     return Container(
+              //       child: Feature(feature[index]['variant']),
+              //     );
+              //   },
+              // ),
               ListView.builder(
                 itemCount: review.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -226,18 +230,10 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
               builder: (BuildContext context, Widget child, MainModel model) {
                 return Expanded(
                   child: MaterialButton(
-                    color: Colors.deepOrange,
+                    color: appBarColor,
                     elevation: 0,
                     onPressed: () {
                       _showDialog();
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => Cart(
-                      //       model: model,
-                      //     ),
-                      //   ),
-                      // );
                     },
                     child: Container(
                       padding: EdgeInsets.all(15.0),
@@ -255,27 +251,6 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
                 );
               },
             ),
-            // Expanded(
-            //   child: MaterialButton(
-            //     color: Colors.black54,
-            //     onPressed: () {},
-            //     child: Container(
-            //       padding: EdgeInsets.only(
-            //         top: 16.0,
-            //         bottom: 16,
-            //       ),
-            //       child: Text(
-            //         "Add ",
-            //         textAlign: TextAlign.center,
-            //         style: TextStyle(
-            //           fontSize: 13.0,
-            //           color: Colors.white,
-            //           fontWeight: FontWeight.w500,
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       ),
@@ -283,25 +258,34 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
   }
 
   Widget _header() {
-    
     return Column(
       children: <Widget>[
         Container(
-          margin: EdgeInsets.only(
-            left: 80,
-            right: 80,
-            top: 10,
-          ),
           height: 200,
-          child: Image.network(
-            'https://www.1000ftcables.com/images/detailed/2/' + product.image,
-            // width: 300,
-            // height: 250,
+          width: double.infinity,
+          child: CachedNetworkImage(
+            imageUrl: widget.imgLink +
+                product.image,
+            placeholder: (context, url) => Container(
+              margin: EdgeInsets.all(20),
+              child: Container(
+                height: 20,
+                width: 50,
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation(Colors.white),
+                  backgroundColor: Colors.red,
+                ),
+              ),
+            ),
+            errorWidget: (context, url, error) => Icon(Icons.error),
           ),
         ),
+
         Container(
           height: 40,
-          margin: EdgeInsets.only(left: 20,),
+          margin: EdgeInsets.only(
+            left: 20,
+          ),
           padding: EdgeInsets.all(6),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -321,36 +305,36 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
               Column(
                 children: <Widget>[
                   Row(
-            children: <Widget>[
-                   Icon(
-                                    Icons.star,
-                                    color: Colors.amber[700],
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    color: Colors.amber[700],
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    color: Colors.amber[700],
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    color: Colors.amber[700],
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    color: Colors.amber[700],
-                                  ),
-            ],
-          ),
+                    children: <Widget>[
+                      Icon(
+                        Icons.star,
+                        color: Colors.amber[700],
+                      ),
+                      Icon(
+                        Icons.star,
+                        color: Colors.amber[700],
+                      ),
+                      Icon(
+                        Icons.star,
+                        color: Colors.amber[700],
+                      ),
+                      Icon(
+                        Icons.star,
+                        color: Colors.amber[700],
+                      ),
+                      Icon(
+                        Icons.star,
+                        color: Colors.amber[700],
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ],
           ),
           color: Colors.white30,
         ),
-         
+
         // Container(
         //   margin: EdgeInsets.only(
         //     left: 20,
@@ -384,51 +368,6 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
           ),
           color: Colors.white30,
         ),
-          // Container(
-          //                 margin: EdgeInsets.only(
-          //                   left: 40,
-          //                   right: 10,
-          //                   top: 10,
-          //                 ),
-          //                 child: Row(
-          //                   children: <Widget>[
-          //                     MinusPlus(
-          //                      // quantity: cartItem.quantity, 
-          //                     ),
-          //                   ],
-          //                 ),
-          //               ),
-        // Container(
-        //   padding: EdgeInsets.only(left: 20,
-
-        //   ),
-        //   color: Colors.white,
-        //   child: Row(
-        //     // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //     children: <Widget>[
-        //       Expanded(
-        //         child: Text("Choose Color"),
-        //       ),
-        //       Expanded(
-        //         child: DropdownButton(
-        //           items: data.map((item) {
-        //             return new DropdownMenuItem(
-
-        //               child: new Text(item['variant']),
-        //               value: item['variant'].toString(),
-        //                );
-        //           }).toList(),
-        //           onChanged: (newVal) {
-        //             setState(() {
-        //               _selectedcolor = newVal;
-        //             });
-        //           },
-        //           value: _selectedcolor,
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
       ],
     );
   }
@@ -456,12 +395,12 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
               style: TextStyle(color: Colors.black),
             ),
           ),
-          Tab(
-            child: Text(
-              'Features',
-              style: TextStyle(color: Colors.black),
-            ),
-          ),
+          // Tab(
+          //   child: Text(
+          //     'Features',
+          //     style: TextStyle(color: Colors.black),
+          //   ),
+          // ),
           Tab(
             child: Text(
               'Reviews',

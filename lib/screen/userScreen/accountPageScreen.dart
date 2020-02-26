@@ -1,171 +1,3 @@
-// // import 'dart:convert';
-// // import 'package:flutter/material.dart';
-// // import 'package:flutter_cable/screen/homepageScreen.dart';
-// // import 'package:flutter_cable/screen/productPages/myOrdersScreen.dart';
-// // import 'package:flutter_cable/screen/userScreen/updateBSAddressScreen.dart';
-// // import 'package:flutter_cable/screen/userScreen/updatePersonalInfoScreen.dart';
-// // import 'package:flutter_cable/screen/cartScreen/cartScreen.dart';
-// // import 'package:flutter_cable/widgets/preference.dart';
-// // import 'package:flutter_cable/model/user.dart';
-// // import 'package:scoped_model/scoped_model.dart';
-// // import 'package:flutter_cable/scoped-models/Model.dart';
-// import 'dart:convert';
-
-// import 'package:flutter_cable/model/user.dart';
-// import 'package:flutter_cable/scoped-models/Model.dart';
-// import 'package:http/http.dart' as http;
-
-// // class Accounts extends StatefulWidget {
-// //   @override
-// //   _AccountsState createState() => _AccountsState();
-// // }
-
-// // class _AccountsState extends State<Accounts> {
-// //   List blog = List();
-// //   List blogForDisplay = List();
-// // User user;
-// //   MainModel model;
-// //    Map<String, dynamic> _formData = {};
-// //   Future<List> fetchData() async {
-// //     var response = await http.get(
-// //         'http://192.168.10.7/1000ft/getuserProfile.php?user_id=2933');
-
-// //     var notes = List();
-
-// //     if (response.statusCode == 200) {
-// //        blog = json.decode(response.body);
-// //        print(blog);
-// //     }
-// //     return notes;
-// //   }
-
-// //   @override
-// //   void initState() {
-    
-// //     model = ScopedModel.of<MainModel>(context);
-// //     _formData['user'] = model.getLoggedInUser;
-// //     _formData['user_id'] = model.getLoggedInUser.user_id;
-// //     fetchData().then((value) {
-// //       setState(() {
-// //         blog.addAll(value);
-// //         blogForDisplay = blog;
-// //       });
-// //     });
-// //     super.initState();
-// //   }
-
-// //   @override
-// //   Widget build(BuildContext context) {
-// //     return Scaffold(
-// //         appBar: AppBar(
-// //           title: Text('Blogs'),
-// //           centerTitle: true,
-// //         ),
-// //         body: FutureBuilder(
-// //             future: fetchData(),
-// //             builder: (context, blog) {
-// //               return Text(blog.toString());}));
-// //   }
-// // }
-// import 'package:flutter/material.dart';
-// import 'package:scoped_model/scoped_model.dart';
-
-// class Profile extends StatefulWidget {
-  
-//   @override
-//   _ProfileState createState() => _ProfileState();
-// }
-
-// class _ProfileState extends State<Profile> {
-//   bool loggedInPresent = false, loggedIn = false;
-//     User user;
-//   MainModel model;
-//    Map<String, dynamic> _formData = {};
-//   @override
-//   void initState() {
-//     super.initState();
-//     ini();
-//     model = ScopedModel.of<MainModel>(context);
-// _formData['user_id'] = model.getLoggedInUser.user_id;
-//     fetchNotes().then((value) {
-//       setState(() {
-//         order.addAll(value);
-//         myOrder = order;
-//       });
-//     });
-//   }
-
-//   void ini() async {
-//     // sharedPreferences = await SharedPreferences.getInstance();
-
-//     // setState(() {
-//     //   loggedInPresent = sharedPreferences.containsKey('LoggedIn');
-//     //   if (loggedInPresent) {
-//     //     loggedIn = sharedPreferences.getBool('LoggedIn');
-//     //   }
-//     // });
-//   }
-
-//   void logout() async {
-//     // sharedPreferences = await PreferenceManager.removeDetails();
-//     Navigator.pop(context);
-//   }
-
-//   List order = List();
-//   List myOrder = List();
-
-//   Future fetchNotes() async {
-//     var response = await http.get(
-//         'http://192.168.10.7/1000ft/getuserProfile.php?user_id=${(_formData['user_id']+1)}');
-//     var notes = List();
-//     if (response.statusCode == 200) {
-//       order = json.decode(response.body);
-//     }
-//     return notes;
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Profile'),
-//         centerTitle: true,
-//         actions: <Widget>[
-//           IconButton(
-//             onPressed: () => Navigator.pop(context),
-//             icon: Icon(
-//               Icons.home,
-//               color: Colors.white,
-//             ),
-//           )
-//         ],
-//       ),
-//       body: Stack(
-//         children: <Widget>[
-         
-//           FutureBuilder(
-//             future: fetchNotes(),
-//             builder: (context, product) {
-//               return product.data == null
-//                   ? Container(
-//                       alignment: AlignmentDirectional.center,
-//                       child: CircularProgressIndicator(
-//                           valueColor: AlwaysStoppedAnimation(Colors.white),
-//                           backgroundColor: Colors.indigo),
-//                     )
-//                   : ListView.builder(
-//                       itemCount: myOrder.length,
-//                       itemBuilder: (context, index) {
-//                         return Text(order[0]['profile_id'].toString()); },
-//                     );
-//             },
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_cable/screen/homepageScreen.dart';
@@ -187,7 +19,6 @@ class Accounts extends StatefulWidget {
 class _AccountsState extends State<Accounts> {
   Map<String, dynamic> _formData = {};
   List data = [];
-  List myUser=List();
   User user;
   MainModel model;
   @override
@@ -196,28 +27,23 @@ class _AccountsState extends State<Accounts> {
     model = ScopedModel.of<MainModel>(context);
     _formData['user'] = model.getLoggedInUser;
     _formData['user_id'] = model.getLoggedInUser.user_id;
-     print(_formData);
-    // addData(_formData);
-    fetchData().then((value) {});
     PreferenceManager.getDetails().then((user) {
       _formData['user'] = user.toJson();
+      print(_formData['user']);
     });
     getUserDetails();
   }
 
-  Future fetchData() async {
-    final response = await http.get(
-        'http://192.168.10.7/1000ft/getuserProfile.php?user_id=${_formData['user_id']}');
+  // Future fetchData() async {
+  //   final response = await http.get(
+  //       'https://1000ftcables.com/appdata/getuserProfile.php?user_id=${_formData['user_id']}');
 
-    if (response.statusCode == 200) {
-       
-      setState(() {
-         data = json.decode(response.body);
-         myUser = data;
-      });
-      
-    }
-  }
+  //   if (response.statusCode == 200) {
+  //     setState(() {
+  //       data = json.decode(response.body);
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -232,14 +58,8 @@ class _AccountsState extends State<Accounts> {
               ),
             ),
           ),
-          ListView
-              // .builder
-              (
+          ListView(
             children: <Widget>[
-              // itemCount: data.length,
-              //  shrinkWrap: true,
-              // itemBuilder: (BuildContext context, int index) {
-              // return
               Column(
                 children: <Widget>[
                   GestureDetector(
@@ -295,31 +115,14 @@ class _AccountsState extends State<Accounts> {
                                       children: <Widget>[
                                         Row(
                                           children: <Widget>[
-                                            Text(myUser[0]),
-                                                                                        Text(
-                                            //  _formData['user']['firstname'],
-                                              user?.firstname ?? '' ,
+                                            Text(
+                                             
+                                              user?.firstname ?? '',
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .title,
                                             ),
-                                            // Container(
-                                            //   margin: EdgeInsets.only(
-                                            //     top: 3,
-                                            //   ),
-                                            //   child: Text( user?.lastname ?? '' ,
-                                            //       // "\t" +
-                                            //       //     _formData['user']
-                                            //       //         ['lastname'],
-                                            //       //user?.lastname ?? '',
-                                            //       style: TextStyle(
-                                            //         fontSize: 19,
-                                            //         fontWeight: FontWeight.bold,
-                                            //         color: Colors.black87,
-                                            //       )
-                                            //       //     Theme.of(context).textTheme.title,
-                                            //       ),
-                                            // ),
+                                           
                                           ],
                                         ),
                                         Container(
@@ -328,8 +131,8 @@ class _AccountsState extends State<Accounts> {
                                             bottom: 20,
                                           ),
                                           child: Text(
-                                            //_formData['user']['email'],
-                                             user?.email ?? '',
+                                            _formData['user']['email'],
+                                           // user?.user_id ?? '',
                                           ),
                                         ),
                                       ],
@@ -389,10 +192,10 @@ class _AccountsState extends State<Accounts> {
                                       Expanded(
                                         child: Column(
                                           children: <Widget>[
-                                            Icon(
-                                              Icons.favorite,
-                                            ),
-                                            Text("Favourites")
+                                            // Icon(
+                                            //   Icons.favorite,
+                                            // ),
+                                            // Text("Favourites")
                                           ],
                                         ),
                                       ),
@@ -451,27 +254,27 @@ class _AccountsState extends State<Accounts> {
                                         color: Colors.black45,
                                       ),
                                     ),
-                                    GestureDetector(
-                                      child: Icon(
-                                        Icons.edit,
-                                        color: Colors.black45,
-                                      ),
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => updateInfo(),
-                                          ),
-                                        );
-                                      },
-                                    ),
+                                    // GestureDetector(
+                                    //   child: Icon(
+                                    //     Icons.edit,
+                                    //     color: Colors.black45,
+                                    //   ),
+                                    //   onTap: () {
+                                    //     Navigator.push(
+                                    //       context,
+                                    //       MaterialPageRoute(
+                                    //         builder: (context) => updateInfo(),
+                                    //       ),
+                                    //     );
+                                    //   },
+                                    // ),
                                   ],
                                 ),
                               ),
                               ListTile(
                                 title: Text(
-                                  user?.email ?? '',
-                                  //_formData['user']['email'],
+                            //      user?.email ?? '',
+                                  _formData['user']['email'],
                                 ),
                                 leading: Icon(Icons.email),
                               ),
@@ -490,27 +293,27 @@ class _AccountsState extends State<Accounts> {
                                         color: Colors.black45,
                                       ),
                                     ),
-                                    GestureDetector(
-                                      child: Icon(
-                                        Icons.edit,
-                                        color: Colors.black45,
-                                      ),
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => updateInfo(),
-                                          ),
-                                        );
-                                      },
-                                    ),
+                                    // GestureDetector(
+                                    //   child: Icon(
+                                    //     Icons.edit,
+                                    //     color: Colors.black45,
+                                    //   ),
+                                    //   onTap: () {
+                                    //     Navigator.push(
+                                    //       context,
+                                    //       MaterialPageRoute(
+                                    //         builder: (context) => updateInfo(),
+                                    //       ),
+                                    //     );
+                                    //   },
+                                    // ),
                                   ],
                                 ),
                               ),
                               ListTile(
                                 title: Text(
-                                  //_formData['user']['phone'],
-                                  user?.phone ?? '',
+                                  _formData['user']['s_phone'],
+                                 // user?.s_phone.toString() ?? '',
                                 ),
                                 leading: Icon(Icons.phone),
                               ),
@@ -529,184 +332,35 @@ class _AccountsState extends State<Accounts> {
                                         color: Colors.black45,
                                       ),
                                     ),
-                                    GestureDetector(
-                                      child: Icon(
-                                        Icons.edit,
-                                        color: Colors.black45,
-                                      ),
-                                      onTap: () {
-                                       
-                                         Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  updateShippingAddress(),
-                                            ),
-                                          );
-                                        
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              ListView.builder(
-                                itemCount: data.length,
-                                shrinkWrap: true,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return ListTile(
-                                    title: Text(
-                                      data[index]["s_address"] +
-                                          ",\t" +
-                                          data[index]["s_city"] +
-                                          ",\t" +
-                                          data[index]["s_state"] +
-                                          ",\t" +
-                                          data[index]["s_country"] +
-                                          ",\t" +
-                                          data[index]["s_zipcode"],
-                                    ),
-                                    leading: Icon(Icons.location_city),
-                                  );
-                                },
-                              ),
-                               Row(
-                                 
-                                children: <Widget>[
-                                  Container(
-                                    margin: EdgeInsets.only(top: 20,left: 20,bottom: 20,),
-                                    child: Text("Add Shipping Address"),
-                                  ),
-                   
-                              ],),
-                              
-                              Container(
-                                color: Colors.grey.shade200,
-                                padding: EdgeInsets.all(
-                                  8.0,
-                                ),
-                                width: double.infinity,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Text(
-                                      "Billing Address".toUpperCase(),
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black45,
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      child: Icon(
-                                        Icons.edit,
-                                        color: Colors.black45,
-                                      ),
-                                      onTap: () {
-                                        
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  updateShippingAddress(),
-                                            ),
-                                          );
-                                        
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              ListView.builder(
-                                itemCount: data.length,
-                                shrinkWrap: true,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return ListTile(
-                                    title: Text(
-                                      data[index]["b_address"] +
-                                          ",\t" +
-                                          data[index]["b_city"] +
-                                          ",\t" +
-                                          data[index]["b_state"] +
-                                          ",\t" +
-                                          data[index]["b_country"] +
-                                          ",\t" +
-                                          data[index]["b_zipcode"],
-                                    ),
-                                    leading: Icon(Icons.location_city),
-                                  );
-                                },
-                              ),
-                              Row(
-                                 
-                                children: <Widget>[
-                                  Container(
-                                    margin: EdgeInsets.only(top: 20,left: 20,),
-                                    child: Text("Add Billing Address"),
-                                  ),
-                   
-                              ],),
-                              
-                             
-                              Container(
-                                color: Colors.grey.shade200,
-                                margin: EdgeInsets.only(top: 20,),
-                                padding: EdgeInsets.all(8.0),
-                                width: double.infinity,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Text(
-                                      "Payment Info".toUpperCase(),
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black45,
-                                      ),
-                                    ),
-                                     Icon(
-                                        Icons.edit,
-                                        color: Colors.black45,
-                                      ),
-                                      
+                                    // GestureDetector(
+                                    //   child: Icon(
+                                    //     Icons.edit,
+                                    //     color: Colors.black45,
+                                    //   ),
+                                    //   onTap: () {
+                                    //     Navigator.push(
+                                    //       context,
+                                    //       MaterialPageRoute(
+                                    //         builder: (context) => updateInfo(),
+                                    //       ),
+                                    //     );
+                                    //   },
+                                    // ),
                                   ],
                                 ),
                               ),
                               ListTile(
-                                title: Text("Add your Payment info"),
-                                leading: Icon(Icons.location_city),
-                              ),
-                              Container(
-                                color: Colors.grey.shade200,
-                                padding: EdgeInsets.all(8.0),
-                                width: double.infinity,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Text(
-                                      "Shipment Info".toUpperCase(),
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black45,
-                                      ),
-                                    ),
-                                     Icon(
-                                        Icons.edit,
-                                        color: Colors.black45,
-                                      ),
-                                       
-                                  ],
-                                ),
-                              ),
-                              ListTile(
-                                title: Text("Add your Shipment info"),
-                                leading: Icon(Icons.location_city),
+                                title:Text(  _formData['user']['s_address'] +" ,"+  _formData['user']['s_city'] +" ,"+  _formData['user']['s_country'],),
+                                //  Text("${user?.s_address.toString()}" +
+                                //     "${user?.s_city.toString()}" +
+                                //     "${user?.s_country.toString()}"),
+                                leading: Icon(Icons.local_shipping),
                               ),
                               Divider(),
                               ListTile(
                                 title: Text("Setting"),
                                 subtitle: Text(
-                                  "Update/Add your Account Info",
+                                  "Update Your Account Information",
                                   style: TextStyle(
                                     decoration: TextDecoration.underline,
                                   ),
@@ -714,14 +368,13 @@ class _AccountsState extends State<Accounts> {
                                 leading: Icon(Icons.settings),
                                 trailing: Icon(Icons.edit),
                                 onTap: () {
-                                   
-                                   Navigator.push(
+                                  Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => updateShippingAddress(),
+                                      builder: (context) =>
+                                          updateShippingAddress(),
                                     ),
-                                  ); 
-                                  
+                                  );
                                 },
                               ),
                               ListTile(

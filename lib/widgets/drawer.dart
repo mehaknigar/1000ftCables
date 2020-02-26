@@ -30,9 +30,9 @@ class _MainDrawerState extends State<MainDrawer> {
   @override
   void initState() {
     super.initState();
-    model = ScopedModel.of<MainModel>(context);
-     _formData['user'] = model.getLoggedInUser;
-    _formData['user_id'] = model.getLoggedInUser.user_id;
+    // model = ScopedModel.of<MainModel>(context);
+    // _formData['user'] = model.getLoggedInUser;
+    // _formData['user_id'] = model.getLoggedInUser.user_id;
     // //print(_formData);
     // addData(_formData);
     
@@ -83,19 +83,18 @@ class _MainDrawerState extends State<MainDrawer> {
             onTap: () {
                       PreferenceManager.getDetails().then((user) {
                         if (user != null &&
-                            user.email != null &&
-                            user.password != null) {
+                            user.email != null ) {
                                ScopedModel.of<MainModel>(context).setLoggedInUser(user);
                                PreferenceManager.saveDetails(user);
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) =>Accounts (
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Accounts(
                                 
-                          //       //code: _formData['billingdetail']['s_zipcode'],
-                          //     ),
-                          //   ),
-                          // );
+                                //code: _formData['billingdetail']['s_zipcode'],
+                              ),
+                            ),
+                          );
                         } else
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) => Login()));
@@ -217,7 +216,18 @@ class _MainDrawerState extends State<MainDrawer> {
             onTap: () {},
           ),
            
-         
+          // ListTile(
+          //   leading: Image.asset(
+          //     'Assets/images/Vector Smart Object-2.png',
+          //     //width: 200,
+          //     height: 25,
+          //   ),
+          //   title: Text('Coupon Code',
+          //       style: TextStyle(
+          //         color: Colors.white,
+          //       )),
+          //   onTap: () {},
+          // ),
           
         ],
       ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cable/model/CartItem.dart';
 import 'package:flutter_cable/model/user.dart';
 import 'package:flutter_cable/scoped-models/Model.dart';
+import 'package:flutter_cable/screen/cartScreen/shippingScreen.dart';
 
 import 'package:flutter_cable/widgets/preference.dart';
 import 'package:flutter_cable/screen/userScreen/loginPageScreen.dart';
@@ -87,112 +88,7 @@ class _CartState extends State<Cart> {
       shrinkWrap: true,
       children: <Widget>[
         ...cartItemList.map((c) => _cartItemCard(c)).toList(),
-        // Card(
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //     children: <Widget>[
-        //       Container(
-        //         padding: EdgeInsets.only(left: 10, right: 10),
-        //         child: Text(
-        //           'Total',
-        //           style: TextStyle(
-        //             fontSize: 15,
-        //             fontWeight: FontWeight.bold,
-        //             color: Colors.black,
-        //           ),
-        //         ),
-        //       ),
-        //       Container(
-        //         padding:
-        //             EdgeInsets.only(left: 10, top: 15, bottom: 15, right: 20),
-        //         child: Text(
-        //           '\$ ${model.getCartSubTotal}',
-        //           style: TextStyle(
-        //             fontSize: 18,
-        //             fontWeight: FontWeight.bold,
-        //             color: Colors.black,
-        //           ),
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   children: <Widget>[
-        //     ScopedModelDescendant(
-        //       builder: (BuildContext context, Widget child, MainModel model) {
-        //         return Container(
-        //           padding: EdgeInsets.all(10),
-        //           margin: EdgeInsets.only(
-        //             left: 10,
-        //             right: 10,
-        //           ),
-        //           child: RaisedButton(
-        //             child: Text(
-        //               "Proceed to Shipping",
-        //               style: TextStyle(fontSize: 17),
-        //             ),
-        //             textColor: Colors.white,
-        //             onPressed: () {
-        //               if (model.getCartTotalWeight >= 150) {
-        //                 // flutter defined function
-        //                 return showDialog(
-        //                   context: context,
-        //                   builder: (BuildContext context) {
-        //                     // return object of type Dialog
-        //                     return AlertDialog(
-        //                       title: new Text(
-        //                           "Sorry! you cannot place order more than 150 pounds in a one package"),
-        //                       // content: new Text("Alert Dialog body"),
-        //                       actions: <Widget>[
-        //                         // usually buttons at the bottom of the dialog
-        //                         FlatButton(
-        //                           child: new Text(
-        //                             "OK",
-        //                             style: TextStyle(
-        //                                 fontSize: 17.0,
-        //                                 color: Colors.red,
-        //                                 fontWeight: FontWeight.w500),
-        //                           ),
-        //                           onPressed: () {
-        //                             Navigator.pop(context);
-        //                           },
-        //                         ),
-        //                       ],
-        //                     );
-        //                   },
-        //                 );
-        //               }
-
-        //               PreferenceManager.getDetails().then((user) {
-        //                 if (user != null &&
-        //                     user.email != null &&
-        //                     user.password != null) {
-        //                   ScopedModel.of<MainModel>(context)
-        //                       .setLoggedInUser(user);
-        //                   PreferenceManager.saveDetails(user);
-        //                   Navigator.push(
-        //                     context,
-        //                     MaterialPageRoute(
-        //                       builder: (context) => Shipping(
-        //                         model: model,
-        //                         //code: _formData['billingdetail']['s_zipcode'],
-        //                       ),
-        //                     ),
-        //                   );
-        //                 } else
-        //                   Navigator.push(context,
-        //                       MaterialPageRoute(builder: (context) => Login()));
-        //               });
-        //             },
-        //             color: Colors.blue,
-        //           ),
-        //         );
-        //       },
-        //     ),
-        //   ],
-        // ),
+        
       ],
     );
   }
@@ -432,15 +328,15 @@ class _CartTotal extends StatelessWidget {
                           ScopedModel.of<MainModel>(context)
                               .setLoggedInUser(user);
                           PreferenceManager.saveDetails(user);
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => Shipping(
-                          //       model: model,
-                          //       //code: _formData['billingdetail']['s_zipcode'],
-                          //     ),
-                          //   ),
-                         // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Checkout(
+                              //   model: model,
+                                //code: _formData['billingdetail']['s_zipcode'],
+                              ),
+                            ),
+                         );
                         } else
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) => Login()));

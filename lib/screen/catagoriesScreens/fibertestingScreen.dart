@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cable/model/Categories.dart';
 import 'package:flutter_cable/scoped-models/Model.dart';
 import 'package:flutter_cable/screen/productPages/AllProductsScreen.dart';
+import 'package:flutter_cable/widgets/ipaddress.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class FiberTestingTool extends StatefulWidget {
@@ -23,6 +24,8 @@ class _FiberTestingToolState extends State<FiberTestingTool> {
     return Scaffold(
         appBar: AppBar(
           title: Text("Fiber Testing Tools"),
+          centerTitle: true,
+          backgroundColor: appBarColor,
         ),
         body: FutureBuilder(
         future:
@@ -56,6 +59,7 @@ class _FiberTestingToolState extends State<FiberTestingTool> {
                     builder: (context) => AllProducts(
                       categories[index].categoryId,
                       categories[index].categoryTitle,
+                      'https://www.1000ftcables.com/images/detailed/0/'
                     ),
                   ),
                 );

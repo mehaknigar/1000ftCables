@@ -112,18 +112,18 @@ class _HomeState extends State<Home> {
                           width: 150,
                           height: 120,
                         ),
-                        Image.asset(
-                          'Assets/images/dealydeals.png',
-                          width: 150,
-                          height: 120,
-                        ),
-                        Image.asset(
-                          'Assets/images/dealydeals.png',
-                          width: 150,
-                          height: 120,
-                        ),
+                        // Image.asset(
+                        //   'Assets/images/dealydeals.png',
+                        //   width: 150,
+                        //   height: 120,
+                        // ),
+                        // Image.asset(
+                        //   'Assets/images/dealydeals.png',
+                        //   width: 150,
+                        //   height: 120,
+                        // ),
                       ],
-                      animationDuration: Duration(milliseconds: 1500),
+                      animationDuration: Duration(milliseconds: 3500),
                       boxFit: BoxFit.fill,
                       dotSize: 0.0,
                        
@@ -143,12 +143,12 @@ class _HomeState extends State<Home> {
                         Image.asset(
                           'Assets/images/1000ft Cat6A Plenum Solid Copper UTP Ethernet Cable.png',
                         ),
-                        Image.asset(
-                          'Assets/images/1000ft Cat6A Plenum Solid Copper UTP Ethernet Cable.png',
-                        ),
-                        Image.asset(
-                          'Assets/images/1000ft Cat6A Plenum Solid Copper UTP Ethernet Cable.png',
-                        ),
+                        // Image.asset(
+                        //   'Assets/images/1000ft Cat6A Plenum Solid Copper UTP Ethernet Cable.png',
+                        // ),
+                        // Image.asset(
+                        //   'Assets/images/1000ft Cat6A Plenum Solid Copper UTP Ethernet Cable.png',
+                        // ),
                       ],
                       animationDuration: Duration(milliseconds: 1500),
                     ),

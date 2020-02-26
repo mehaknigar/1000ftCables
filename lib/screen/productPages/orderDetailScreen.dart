@@ -54,8 +54,7 @@ class _OrderDetailState extends State<OrderDetail> {
                 ),
                 child: Image.network(
                  "https://www.1000ftcables.com/images/detailed/2/cat5e-blue.png?t=1536186605",
-                  // width: 300,
-                  // height: 250,
+                  
                 ),
               ),
               Row(

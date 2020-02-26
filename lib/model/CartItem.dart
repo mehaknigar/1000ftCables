@@ -12,6 +12,7 @@ class CartItem extends Equatable {
   final String productCode;
   final String image;
   final double weight;
+  
 
 
   CartItem({

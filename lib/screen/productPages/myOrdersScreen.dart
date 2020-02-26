@@ -142,7 +142,7 @@ String id;
                         vertical: 10,
                         horizontal: 5,
                       ),
-                      //padding: EdgeInsets.only(left: 50),
+                    
                       child: Icon(Icons.arrow_forward_ios),
                     ),
                   ),

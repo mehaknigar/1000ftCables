@@ -58,8 +58,6 @@ class _findUsState extends State<findUs> {
                 margin: EdgeInsets.all(2),
                 child: Image.asset(
                   'Assets/images/map.png',
-                  // width: 300,
-                  // height: 180,
                 ),
               ),
               Container(
@@ -71,10 +69,9 @@ class _findUsState extends State<findUs> {
               ),
               GestureDetector(
                 onTap: () {
-                   UrlLauncher.launch("mailto:sales@1000ftcables.com");
+                  UrlLauncher.launch("mailto:sales@1000ftcables.com");
                 },
                 child: Container(
-                  //margin: EdgeInsets.all(20),
                   child: Text(
                     "sales@1000ftcables.com",
                     style: TextStyle(
@@ -97,7 +94,6 @@ class _findUsState extends State<findUs> {
                   UrlLauncher.launch("tel://+1 800-759-7253");
                 },
                 child: Container(
-                  //margin: EdgeInsets.all(20),
                   child: Text(
                     "800-759-7253",
                     style: TextStyle(
@@ -126,7 +122,6 @@ class _findUsState extends State<findUs> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Container(
-                    //margin: EdgeInsets.all(20),
                     child: Text(
                       "Technical Support : ",
                       style: TextStyle(

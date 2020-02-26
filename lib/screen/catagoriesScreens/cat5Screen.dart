@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cable/model/Categories.dart';
 import 'package:flutter_cable/scoped-models/Model.dart';
 import 'package:flutter_cable/screen/productPages/AllProductsScreen.dart';
+import 'package:flutter_cable/widgets/ipaddress.dart';
  
 
 import 'package:scoped_model/scoped_model.dart';
@@ -26,6 +27,8 @@ class _Cat5BulkState extends State<Cat5Bulk> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Cat5 Bulk Cables"),
+        centerTitle: true,
+        backgroundColor: appBarColor,
       ),
        body: FutureBuilder(
         future:
@@ -59,6 +62,7 @@ class _Cat5BulkState extends State<Cat5Bulk> {
                     builder: (context) => AllProducts(
                       categories[index].categoryId,
                       categories[index].categoryTitle,
+                      'https://www.1000ftcables.com/images/detailed/2/'
                     ),
                   ),
                 );

@@ -41,6 +41,7 @@ dependencies:
   equatable: ^0.6.0
   dropdownfield: ^1.0.3
   carousel_pro: ^1.0.0
+  cached_network_image: ^1.1.1
     
    
 
