@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cable/scoped-models/Model.dart';
+import 'package:flutter_cable/screen/homepageScreen.dart';
 import 'package:flutter_cable/screen/userScreen/RegisterUserScreen.dart';
-import 'package:flutter_cable/widgets/ipaddress.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'dart:convert';
@@ -67,16 +67,16 @@ class _LoginState extends State<Login> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(top: 10, left: 10.0),
-                              child: IconButton(
-                                icon: Icon(
-                                  Icons.arrow_back,
-                                  color: Colors.white,
-                                ),
-                                onPressed: () => Navigator.pop(context),
-                              ),
-                            ),
+                           Padding(
+                    padding: const EdgeInsets.only(top: 30, left: 10.0),
+                    child: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      child: IconButton(
+                        icon: Icon(Icons.arrow_back),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ),
+                  ),
                           ],
                         ),
                         SizedBox(
@@ -211,6 +211,7 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     onPressed: () {
+                      FocusScope.of(context).unfocus();
                       login();
                     },
                   ),
@@ -283,10 +284,11 @@ class _LoginState extends State<Login> {
 
   void makeHttpRequest(String email, String password) async {
     http.Response response = await http.get(
-      "http://${ip}/1000ft/signin.php?email=${emailController.text}&password=${passController.text}",
+      "https://1000ftcables.com/appdata/signin.php?email=${emailController.text}&password=${passController.text}",
     );
 
     Map<String, dynamic> map = jsonDecode(response.body);
+    
     String title = "Valid User";
     if (map['statusCode'] == 200 && map['statusMessage'] == 'AuthorizedUser') {
       Map<String, dynamic> userDetails = map["userDetails"];
@@ -308,10 +310,11 @@ class _LoginState extends State<Login> {
       ScopedModel.of<MainModel>(context).setLoggedInUser(user);
       PreferenceManager.saveDetails(user);
       print(user);
-      Navigator.pop(context);
+     
       setState(() {
-        _isInAsyncCall = false;
+        _isInAsyncCall = true;
       });
+       Navigator.push(context, MaterialPageRoute(builder: ((context) => Home())));
     } else {
       showDialog(
         context: context,

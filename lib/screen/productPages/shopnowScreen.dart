@@ -16,36 +16,34 @@ class Shopnow extends StatelessWidget {
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          
           Image.asset(
             "Assets/images/BG.png",
             fit: BoxFit.fill,
           ),
           Column(
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(5,10,0,0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                   children: <Widget>[
-                     
-                    IconButton(
-                        icon: Icon(Icons.arrow_back,
-                        color: Colors.white,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 30, left: 10.0),
+                    child: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      child: IconButton(
+                        icon: Icon(Icons.arrow_back),
                         onPressed: () => Navigator.pop(context),
                       ),
-                    
-                  ],
-                ),
+                    ),
+                  ),
+                ],
               ),
               Expanded(
-                 
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Image.asset(
                       'Assets/images/logo.png',
-                      width: 250,
+                      width: 280,
                     ),
                   ],
                 ),

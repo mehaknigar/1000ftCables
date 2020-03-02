@@ -1,6 +1,8 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_cable/scoped-models/Model.dart';
 import 'package:flutter_cable/screen/drawerPages/aboutUsScreen.dart';
+import 'package:flutter_cable/screen/productPages/myOrdersScreen.dart';
 import 'package:flutter_cable/screen/userScreen/accountPageScreen.dart';
 import 'package:flutter_cable/screen/drawerPages/blogScreen.dart';
 import 'package:flutter_cable/screen/drawerPages/contactScreen.dart';
@@ -13,6 +15,7 @@ import 'package:flutter_cable/widgets/preference.dart';
 
 import 'package:flutter_cable/model/user.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:share/share.dart';
 
 class MainDrawer extends StatefulWidget {
   static const routeName = '/blog';
@@ -30,15 +33,7 @@ class _MainDrawerState extends State<MainDrawer> {
   @override
   void initState() {
     super.initState();
-    // model = ScopedModel.of<MainModel>(context);
-    // _formData['user'] = model.getLoggedInUser;
-    // _formData['user_id'] = model.getLoggedInUser.user_id;
-    // //print(_formData);
-    // addData(_formData);
-    
-    // PreferenceManager.getDetails().then((user) {
-    //   _formData['user'] = user.toJson();
-    // });
+  
     
   }
  
@@ -50,11 +45,11 @@ class _MainDrawerState extends State<MainDrawer> {
     return Drawer(
         child: Container(
       color: Color(0xff002A5B),
-      child: ListView(
-        //padding: EdgeInsets.zero,
+      child: 
+ListView(
         children: <Widget>[
           DrawerHeader(
-            //child: Text(''),
+        
             child: Image.asset(
               'Assets/images/logo_mark_final.png',
             ),
@@ -91,7 +86,6 @@ class _MainDrawerState extends State<MainDrawer> {
                             MaterialPageRoute(
                               builder: (context) => Accounts(
                                 
-                                //code: _formData['billingdetail']['s_zipcode'],
                               ),
                             ),
                           );
@@ -119,7 +113,6 @@ class _MainDrawerState extends State<MainDrawer> {
            ListTile(
             leading: Image.asset(
               'Assets/images/blog.png',
-              //width: 200,
               height: 20,
             ),
             title: Text('Blog',
@@ -132,20 +125,6 @@ class _MainDrawerState extends State<MainDrawer> {
             },
           ),
           
-          ListTile(
-            leading: Icon(
-              Icons.contact_phone,
-              color: Colors.white,
-            ),
-            title: Text('Contact',
-                style: TextStyle(
-                  color: Colors.white,
-                )),
-            onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Contact()));
-            },
-          ),
           ListTile(
             leading: Icon(
               Icons.location_on,
@@ -162,23 +141,8 @@ class _MainDrawerState extends State<MainDrawer> {
           ),
            
           ListTile(
-            leading: Icon(
-              Icons.info,
-              color: Colors.white,
-            ),
-            title: Text('About',
-                style: TextStyle(
-                  color: Colors.white,
-                )),
-            onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Aboutus()));
-            },
-          ),
-          ListTile(
             leading: Image.asset(
               'Assets/images/social.png',
-              //width: 200,
               height: 25,
             ),
             title: Text('Follow',
@@ -190,20 +154,7 @@ class _MainDrawerState extends State<MainDrawer> {
                   context, MaterialPageRoute(builder: (context) => Followus()));
             },
           ),
-          ListTile(
-            leading: Icon(
-              Icons.thumbs_up_down,
-              color: Colors.white,
-            ),
-            title: Text('Rate',
-                style: TextStyle(
-                  color: Colors.white,
-                )),
-            onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Rate()));
-            },
-          ),
+
           ListTile(
             leading: Icon(
               Icons.share,
@@ -213,22 +164,12 @@ class _MainDrawerState extends State<MainDrawer> {
                 style: TextStyle(
                   color: Colors.white,
                 )),
-            onTap: () {},
+            onTap: () {
+               Share.share("https://www.skylite.com/");
+            },
           ),
-           
-          // ListTile(
-          //   leading: Image.asset(
-          //     'Assets/images/Vector Smart Object-2.png',
-          //     //width: 200,
-          //     height: 25,
-          //   ),
-          //   title: Text('Coupon Code',
-          //       style: TextStyle(
-          //         color: Colors.white,
-          //       )),
-          //   onTap: () {},
-          // ),
-          
+        
+         
         ],
       ),
     ));

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cable/screen/drawerPages/reviewsScreen.dart';
 import 'package:flutter_cable/screen/drawerPages/testimonialScreen.dart';
+import 'package:flutter_cable/widgets/ipaddress.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:io' show Platform;
 
@@ -36,13 +37,15 @@ class _RateState extends State<Rate> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Rate"),
+        centerTitle: true,
+        backgroundColor: appBarColor,
       ),
       body: new Stack(
         children: <Widget>[
           new Container(
             decoration: new BoxDecoration(
               image: new DecorationImage(
-                  image: new AssetImage("Assets/images/BG.png"),
+                  image: new AssetImage(bg1),
                   fit: BoxFit.cover),
             ),
           ),
@@ -69,7 +72,6 @@ class _RateState extends State<Rate> {
                  
               ),
               Container(
-                // height: 150,
                 margin: const EdgeInsets.only(
                   left: 30,
                   right: 30,
@@ -82,20 +84,19 @@ class _RateState extends State<Rate> {
                     },
                     child: Image.asset(
                       'Assets/images/Andriod.png',
-                      // width: 400,
-                      // height: 150,
+                     
                     ),
                   ),
                  
               ),
               Container(
-                // height: 150,
+                
                 margin: const EdgeInsets.only(
                   bottom: 50,
                   left: 30,
                   right: 30,
                 ),
-                //width: double.infinity,
+               
                 
                   child: GestureDetector(
                     onTap: () {
@@ -103,8 +104,7 @@ class _RateState extends State<Rate> {
                     },
                     child: Image.asset(
                       'Assets/images/review.png',
-                      // width: 400,
-                      // height: 150,
+                      
                     ),
                   ),
                 ),

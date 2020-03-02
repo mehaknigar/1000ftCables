@@ -175,16 +175,16 @@ class ConnectedModel extends Model {
 
    
 
-  Future<Null> submitreviews(Map<String, dynamic> requestBody) async {
-    var url = "http://${ip}/flutter/addreviews.php";
-    var response = await http.post(
-      url,
-      body: jsonEncode(requestBody),
-    );
-    print(response.body);
-    //  Navigator.pushReplacement(
-    //       context, MaterialPageRoute(builder: (context) => Lo
-  }
+  // Future<Null> submitreviews(Map<String, dynamic> requestBody) async {
+  //   var url = "http://${ip}/flutter/addreviews.php";
+  //   var response = await http.post(
+  //     url,
+  //     body: jsonEncode(requestBody),
+  //   );
+  //   print(response.body);
+  //   //  Navigator.pushReplacement(
+  //   //       context, MaterialPageRoute(builder: (context) => Lo
+  // }
 
   Future<List<Categories>> fetchCategories() async {
     final response =

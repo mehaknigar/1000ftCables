@@ -60,7 +60,7 @@ class _Cat5BulkState extends State<Cat5Bulk> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => AllProducts(
-                      categories[index].categoryId,
+                      categories[index].categoryId.toString(),
                       categories[index].categoryTitle,
                       'https://www.1000ftcables.com/images/detailed/2/'
                     ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cable/widgets/ipaddress.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:io' show Platform;
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
@@ -40,6 +41,8 @@ class _findUsState extends State<findUs> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Find Us"),
+        centerTitle: true,
+       backgroundColor: appBarColor,
       ),
       body: new Stack(
         children: <Widget>[
@@ -108,7 +111,7 @@ class _findUsState extends State<findUs> {
                   UrlLauncher.launch("tel://+1 408-934-9349");
                 },
                 child: Container(
-                  //margin: EdgeInsets.all(20),
+                
                   child: Text(
                     "408-934-9349",
                     style: TextStyle(

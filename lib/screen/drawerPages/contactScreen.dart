@@ -1,31 +1,50 @@
+import 'package:email_validator/email_validator.dart';
+import 'package:flutter_cable/screen/homepageScreen.dart';
+import 'package:flutter_cable/widgets/ipaddress.dart';
+import 'package:flutter_cable/widgets/ipaddress.dart' as prefix0;
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:sweetalert/sweetalert.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 class Contact extends StatefulWidget {
-   @override
-    
+  @override
   _ContactState createState() => _ContactState();
 }
-var p=408-934-9349;
+
+var p = 408 - 934 - 9349;
+
 class _ContactState extends State<Contact> {
-
-   
-
-  TextEditingController fname = TextEditingController();
-  TextEditingController lname = TextEditingController();
-  TextEditingController number = TextEditingController();
+  Map<String, dynamic> _formData = {};
+  final formKey = GlobalKey<FormState>();
+  TextEditingController name = TextEditingController();
+  TextEditingController email = TextEditingController();
   TextEditingController message = TextEditingController();
 
   Future sendMail() async {
-  final response = await http.post("https://1000ftcables.com/appdata/contactUs.php", body: <String, dynamic>{
-      'fname': fname.text,
-      'lname': lname.text,
-      'number': number.text,
-      'message':message.text,
-    });
-    print(response.body);
-     
+    if ((EmailValidator.validate(email.text)) == true) {
+      final response = await http.post(
+          "https://1000ftcables.com/appdata/contactUs.php",
+          body: <String, dynamic>{
+            'name': name.text,
+            'email': email.text,
+            'message': message.text
+          });
+      SweetAlert.show(
+        context,
+        subtitle: "Your mail is sent",
+        style: SweetAlertStyle.success,
+      );
+      name.text = '';
+      email.text = '';
+      message.text = '';
+    } else {
+      SweetAlert.show(
+        context,
+        subtitle: "Email invalid",
+        style: SweetAlertStyle.error,
+      );
+    }
   }
 
   @override
@@ -33,203 +52,197 @@ class _ContactState extends State<Contact> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Contact us"),
+        centerTitle: true,
+        backgroundColor: appBarColor,
       ),
       body: Stack(
         children: <Widget>[
           new Container(
             decoration: new BoxDecoration(
               image: new DecorationImage(
-                  image: new AssetImage("Assets/images/BG.png"),
-                  fit: BoxFit.cover),
+                  image: new AssetImage(bg1), fit: BoxFit.cover),
             ),
           ),
           SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Container(
-                  height: 60,
-                  //margin: const EdgeInsets.only(top: 40),
-                  width: double.infinity,
-                  child: Card(
-                      color: Colors.transparent,
-                       child: GestureDetector(
-                       onTap: ()  {
-                            UrlLauncher.launch("tel://+1 408-934-9349");
-                       },
-
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            "CALL NOW: 408-934-9349",
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Container(
+                    height: 60,
+                    width: double.infinity,
+                    child: Card(
+                        color: Colors.transparent,
+                        child: GestureDetector(
+                            onTap: () {
+                              UrlLauncher.launch("tel://+1 408-934-9349");
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  "CALL NOW: 408-934-9349",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 22,
+                                    fontStyle: FontStyle.italic,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                )
+                              ],
+                            ))),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                          child: Text(
+                        "OR",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )),
+                    ],
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                          margin: const EdgeInsets.only(top: 20),
+                          child: Text(
+                            "Write Us",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 22,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.bold,
                             ),
-                          )
-                        ],
-                      ))),
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  //crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                        //margin: const EdgeInsets.only(right: 15, left: 15),
-                        child: Text(
-                      "OR",
-                      style: TextStyle(
+                          )),
+                    ],
+                  ),
+                  
+                  Container(
+                    margin: EdgeInsets.fromLTRB(25, 50, 25, 16),
+                    decoration: BoxDecoration(
                         color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        //decoration: TextDecoration.underline,
-                      ),
-                    )),
-                  ],
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  //crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: Text(
-                          "Write Us",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            //decoration: TextDecoration.underline,
+                        borderRadius: BorderRadius.circular(10.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: appBarColor,
+                            offset: Offset(5, 5),
+                            blurRadius: 10.0,
+                          )
+                        ]),
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      children: <Widget>[
+                        const SizedBox(height: 14.0),
+                        TextFormField(
+                          controller: name,
+                          onChanged: (value) {
+                            _formData['name'] = value;
+                          },
+                          validator: (String value) {
+                            if (value.isEmpty) {
+                              return "Name Required";
+                            }
+                            return null;
+                          },
+                          textInputAction: TextInputAction.done,
+                          decoration: InputDecoration(
+                            prefixIcon: Material(
+                              color: Colors.transparent,
+                              child: Icon(
+                                Icons.person,
+                                color: prefix0.appBarColor,
+                              ),
+                            ),
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(color: appBarColor)),
+                            contentPadding: const EdgeInsets.all(
+                              16.0,
+                            ),
+                            hintText: "Name",
                           ),
-                        )),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                  width: 10,
-                ),
-                new Container(
-                  margin: const EdgeInsets.only(right: 22, left: 22),
-                  child: new TextField(
-                    controller: fname,
-
-                    decoration: InputDecoration(
-                        filled: true,
-                        //fillColor: Colors.white,
-                        labelText: "First",
-                        hintText: "First",
-                        labelStyle: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
                         ),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(4)),
-                            borderSide: BorderSide(
-                                width: 2,
-                                color: Colors.black,
-                                style: BorderStyle.solid))),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                  width: 10,
-                ),
-                new Container(
-                  margin: const EdgeInsets.only(right: 22, left: 22),
-                  child: new TextField(
-                    controller: lname,
-
-                    decoration: InputDecoration(
-                        filled: true,
-                        //fillColor: Colors.white,
-                        labelText: "Last",
-                        hintText: "Last",
-                        labelStyle: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
+                        const SizedBox(height: 16.0),
+                        TextFormField(
+                          controller: email,
+                          onChanged: (value) {
+                            _formData['email'] = value;
+                          },
+                          validator: (String value) {
+                            if (value.isEmpty) {
+                              return "Email Required";
+                            }
+                            return null;
+                          },
+                          textInputAction: TextInputAction.done,
+                          decoration: InputDecoration(
+                            prefixIcon: Material(
+                              color: Colors.transparent,
+                              child: Icon(
+                                Icons.email,
+                                color: prefix0.appBarColor,
+                              ),
+                            ),
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(color: appBarColor)),
+                            contentPadding: const EdgeInsets.all(
+                              16.0,
+                            ),
+                            hintText: "Email",
+                          ),
                         ),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(4)),
-                            borderSide: BorderSide(
-                                width: 2,
-                                color: Colors.black,
-                                style: BorderStyle.solid))),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                  width: 10,
-                ),
-                new Container(
-                  margin: const EdgeInsets.only(right: 22, left: 22),
-                  child: new TextField(
-                    controller: number,
-
-                    decoration: InputDecoration(
-                        filled: true,
-                        //fillColor: Colors.white,
-                        labelText: "Phone no",
-                        hintText: "Phone no",
-                        labelStyle: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
+                        const SizedBox(height: 16.0),
+                        TextFormField(
+                          controller: message,
+                          onChanged: (value) {
+                            _formData['message'] = value;
+                          },
+                          validator: (String value) {
+                            if (value.isEmpty) {
+                              return "Your Message...";
+                            }
+                            return null;
+                          },
+                          cursorColor: appBarColor,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.red)),
+                            contentPadding: const EdgeInsets.all(
+                              16.0,
+                            ),
+                            hintText: " Message ",
+                          ),
+                          maxLines: 4,
                         ),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(4)),
-                            borderSide: BorderSide(
-                                width: 2,
-                                color: Colors.white,
-                                style: BorderStyle.solid))),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                  width: 10,
-                ),
-                new Container(
-                  margin: const EdgeInsets.only(right: 22, left: 22),
-                  child: new TextField(
-                    maxLines: null,
-                    keyboardType: TextInputType.multiline,
-                    controller: message,
-
-                    decoration: InputDecoration(
-                        //contentPadding: const EdgeInsets.symmetric(vertical: 30.0),
-                        filled: true,
-                        //fillColor: Colors.white,
-                        labelText: "Message",
-                        hintText: "Message",
-                        labelStyle: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
+                        const SizedBox(height: 16.0),
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(),
+                          child: RaisedButton(
+                            elevation: 0,
+                            highlightElevation: 0,
+                            textColor: Colors.white,
+                            color: appBarColor,
+                            onPressed: () => {
+                              setState(() {
+                                if (formKey.currentState.validate()) {
+                                  sendMail();
+                                }
+                              }),
+                            },
+                            child: Text("Submit"),
+                          ),
                         ),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(4)),
-                            borderSide: BorderSide(
-                                width: 2,
-                                color: Colors.black,
-                                style: BorderStyle.solid))),
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 10,
-                  width: 70,
-                ),
-                new Container(
-                  //margin: const EdgeInsets.symmetric(horizontal: 50),
-                  child: RaisedButton(
-                    color: Colors.blue,
-                    onPressed: ()  {
-                             sendMail();
-                       },
-                    child: const Text('Submit',
-                        style: TextStyle(fontSize: 20, color: Colors.white)),
-                  ),
-                )
-              ],
+                ],
+              ),
             ),
           ),
         ],

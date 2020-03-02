@@ -19,7 +19,7 @@ CartItem _$CartItemFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$CartItemToJson(CartItem instance) => <String, dynamic>{
-      'productId': instance.productId,
+      'productId': instance.productId.toString(),
       'productName': instance.productName,
       'productPrice': instance.productPrice,
       'quantity': instance.quantity,

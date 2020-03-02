@@ -59,7 +59,7 @@ class _AllProductsState extends State<AllProducts> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Details(products[index].productId,
+                    builder: (context) => Details(products[index].productId.toString(),
                         products[index].listPrice, products[index].price,widget.imgLink),
                   ),
                 );

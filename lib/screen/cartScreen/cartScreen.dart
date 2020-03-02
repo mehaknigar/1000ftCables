@@ -3,11 +3,11 @@ import 'package:flutter_cable/model/CartItem.dart';
 import 'package:flutter_cable/model/user.dart';
 import 'package:flutter_cable/scoped-models/Model.dart';
 import 'package:flutter_cable/screen/cartScreen/shippingScreen.dart';
+import 'package:flutter_cable/widgets/ipaddress.dart';
 
 import 'package:flutter_cable/widgets/preference.dart';
 import 'package:flutter_cable/screen/userScreen/loginPageScreen.dart';
 import 'package:flutter_cable/widgets/minusPlus.dart';
-import 'package:provider/provider.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class Cart extends StatefulWidget {
@@ -39,6 +39,8 @@ class _CartState extends State<Cart> {
     return Scaffold(
       appBar: new AppBar(
         title: Text("Cart"),
+        centerTitle: true,
+        backgroundColor: appBarColor,
       ),
       body: Container(
         child: Column(
@@ -69,7 +71,7 @@ class _CartState extends State<Cart> {
                   }
                   if (model.getCartItems.length == 0) {
                     return Center(
-                      //child: Text('No item in cart.'),
+        
                     );
                   }
                   return _CartTotal();
@@ -112,7 +114,7 @@ class _CartState extends State<Cart> {
                         );
                       },
                       child: Container(
-                        height: 20,
+                        height: 22,
                         child: Image.asset(
                           'Assets/images/cross2.jpg',
                         ),
@@ -124,129 +126,126 @@ class _CartState extends State<Cart> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      margin: const EdgeInsets.only(right: 0, left: 0),
-                      child: Image.network(
-                        'https://www.1000ftcables.com/images/detailed/2/' +
-                            cartItem.image,
-                        width: 90,
-                        height: 90,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // Expanded(
+              //   flex: 1,
+              //   child: Column(
+              //     children: <Widget>[
+              //       // Container(
+              //       //   margin: const EdgeInsets.only(right: 0, left: 0),
+              //       //   child: Image.network(
+              //       //     'https://www.1000ftcables.com/images/detailed/2/' +
+              //       //         cartItem.image,
+              //       //     width: 90,
+              //       //     height: 90,
+              //       //   ),
+              //       // ),
+              //     ],
+              //   ),
+              // ),
               Expanded(
                 flex: 3,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      //margin: EdgeInsets.only(left: 15 ),
-                      child: Text(
-                        cartItem.productName,
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                child: Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                       
+                        child: Text(
+                         'Name :' + "  " + cartItem.productName,
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Container(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                              
+                              child: Row(
+                                children: <Widget>[
+                                  Text(
+                                'Quantity :' + "  " + ' \$${cartItem.productPrice}',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  Text('  X${cartItem.quantity}',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: appBarColor,
+                                    ),
+                                  ),
+                                ],
+                              )),
+                          Container(
                             margin: EdgeInsets.only(
-                                // left: 15,
-                                // right: 70,
-                                ),
+                              left: 40,
+                              right: 10,
+                              top: 10,
+                            ),
                             child: Row(
                               children: <Widget>[
-                                Text(
-                                  '  \$${cartItem.productPrice}',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.blue,
-                                  ),
-                                ),
-                                Text(
-                                  '  X${cartItem.quantity}',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ],
-                            )),
-                        Container(
-                          margin: EdgeInsets.only(
-                            left: 40,
-                            right: 10,
-                            top: 10,
-                          ),
-                          child: Row(
-                            children: <Widget>[
-                              MinusPlus(
-                                quantity: cartItem.quantity,
-                                onDecrease: () {
-                                  if (cartItem.quantity > 1) {
+                                MinusPlus(
+                                  quantity: cartItem.quantity,
+                                  onDecrease: () {
+                                    if (cartItem.quantity > 1) {
+                                      setState(() {
+                                        cartItem.quantity -= 1;
+                                      });
+                                      widget.model
+                                          .updateCartItemQuantity(cartItem);
+                                    }
+                                  },
+                                  onIncrease: () {
                                     setState(() {
-                                      cartItem.quantity -= 1;
+                                      cartItem.quantity += 1;
                                     });
-                                    widget.model
-                                        .updateCartItemQuantity(cartItem);
-                                  }
-                                },
-                                onIncrease: () {
-                                  setState(() {
-                                    cartItem.quantity += 1;
-                                  });
-                                  widget.model.updateCartItemQuantity(cartItem);
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Container(
-                            margin: EdgeInsets.only(
-                                // left: 15,
-                                // right: 70,
-                                ),
-                            child: Row(
-                              children: <Widget>[
-                                Text(
-                                  '=',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                Text(
-                                  '\$${cartItem.getTotal}',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.blue,
-                                  ),
+                                    widget.model.updateCartItemQuantity(cartItem);
+                                  },
                                 ),
                               ],
-                            )),
-                      ],
-                    ),
-                  ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                              margin: EdgeInsets.only(
+                                  ),
+                              child: Row(
+                                children: <Widget>[
+                                  Text(
+                                    'Price =',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  Text(
+                                    '\$${cartItem.getTotal}',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+                                ],
+                              )),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -267,7 +266,6 @@ class _CartTotal extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            //SizedBox(width: 24),
             ScopedModelDescendant(
               builder: (BuildContext context, Widget child, MainModel model) {
                 return Column(
@@ -292,17 +290,16 @@ class _CartTotal extends StatelessWidget {
                 FlatButton(
                  onPressed: () {
                       if (model.getCartTotalWeight >= 150) {
-                        // flutter defined function
                         return showDialog(
                           context: context,
                           builder: (BuildContext context) {
-                            // return object of type Dialog
+                           
                             return AlertDialog(
                               title: new Text(
                                   "Sorry! you cannot place order more than 150 pounds in a one package"),
-                              // content: new Text("Alert Dialog body"),
+                             
                               actions: <Widget>[
-                                // usually buttons at the bottom of the dialog
+                                
                                 FlatButton(
                                   child: new Text(
                                     "OK",
@@ -332,8 +329,7 @@ class _CartTotal extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => Checkout(
-                              //   model: model,
-                                //code: _formData['billingdetail']['s_zipcode'],
+                           
                               ),
                             ),
                          );
@@ -345,7 +341,7 @@ class _CartTotal extends StatelessWidget {
                   color: Colors.white,
                   child: Text(
                     'Proceed to Shipping',
-                    style: TextStyle(color: Colors.blue,),
+                    style: TextStyle(color: appBarColor),
                   ),
                 ),
               ],

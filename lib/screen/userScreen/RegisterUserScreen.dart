@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_cable/model/user.dart';
 import 'package:flutter_cable/scoped-models/Model.dart';
@@ -42,7 +41,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
   bool _isInAsyncCall = false;
    Future<String> fetchStates() async {
     var res = await http.get(
-        Uri.encodeFull('http://192.168.10.11/1000ft/getCountries.php'),
+        Uri.encodeFull('https://1000ftcables.com/appdata/getCountries.php'),
         headers: {"Accept": "application/json"});
         var resBody = json.decode(res.body);
     setState(() {
@@ -58,7 +57,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
     setState(() {
       _isInAsyncCall = true;
     });
-    var url = "http://192.168.10.11/1000ft/registration.php";
+    var url = "https://1000ftcables.com/appdata/registration.php";
     //var url = "https://1000ftcables.com/appdata/registration.php";
     var response = await http.post(url, body: jsonEncode(body));
     var message = json.decode(response.body);
@@ -148,16 +147,16 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(top: 10, left: 10.0),
-                              child: IconButton(
-                                icon: Icon(
-                                  Icons.arrow_back,
-                                  color: Colors.white,
-                                ),
-                                onPressed: () => Navigator.pop(context),
-                              ),
-                            ),
+                           Padding(
+                    padding: const EdgeInsets.only(top: 30, left: 10.0),
+                    child: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      child: IconButton(
+                        icon: Icon(Icons.arrow_back),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ),
+                  ),
                           ],
                         ),
                         SizedBox(
@@ -409,6 +408,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
                           _formData['email'] = value;
                         },
                         cursorColor: Colors.blueAccent,
+                        keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
                           hintText: "Email *",
                           prefixIcon: Material(
@@ -506,8 +506,7 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
                         onChanged: (value) {
                           _formData['s_address'] = value;
                         },
-                        //obscureText: true,
-                        // controller: conformpass,
+                      
                         cursorColor: Colors.blueAccent,
                         decoration: InputDecoration(
                           hintText: "Address *",

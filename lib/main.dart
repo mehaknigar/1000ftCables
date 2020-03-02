@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter_cable/screen/homepageScreen.dart'; 
@@ -20,6 +19,7 @@ class _MyAppState extends State<MyApp> {
     return ScopedModel(
       model: _model,
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: '1000ftCables',
         theme: ThemeData(
           primarySwatch: Colors.indigo,

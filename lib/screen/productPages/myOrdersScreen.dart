@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cable/model/user.dart';
 import 'package:flutter_cable/scoped-models/Model.dart';
 import 'package:flutter_cable/screen/productPages/orderDetailScreen.dart';
+import 'package:flutter_cable/widgets/ipaddress.dart';
 import 'package:flutter_cable/widgets/preference.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -19,36 +20,40 @@ class myOrders extends StatefulWidget {
 class _myOrdersState extends State<myOrders> {
   Map<String, dynamic> _formData = {};
 
-  List data = [];
+List data = [];
 User user;
-String id;
   MainModel model;
    void initState() {
     super.initState();
     model = ScopedModel.of<MainModel>(context);
     _formData['user'] = model.getLoggedInUser;
     _formData['user_id'] = model.getLoggedInUser.user_id;
-    //print(_formData);
-    // addData(_formData);
     fetchData().then((value) {});
     PreferenceManager.getDetails().then((user) {
       _formData['user'] = user.toJson();
     });
-     
+    getUserDetails();
+  }
+  void getUserDetails() async {
+    user = await PreferenceManager.getDetails();
+    setState(() {});
   }
 
   Future fetchData() async {
     final response = await http.get(
-        'https://1000ftcables.com/appdata/getUserOrders.php?user_id=${_formData['user_id']}');
+        'http://192.168.10.10/1000ft/getUserOrders.php?user_id=${_formData['user_id']}');
 
     if (response.statusCode == 200) {
        
       setState(() {
          data = json.decode(response.body);
-       // _formData['billingdetail'] = data;
+        _formData['billingdetail'] = data;
+        
       });
       
-    }
+      
+    
+}
   }
    
 
@@ -59,99 +64,112 @@ String id;
     return Scaffold(
       appBar: new AppBar(
         title: Text("My Orders"),
+        centerTitle: true,
+        backgroundColor: appBarColor,
       ),
-      body: ListView.builder(
-        itemCount: data.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Card(
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => OrderDetail(
-                      data[index]["order_id"],
-                      data[index]["total"].toString(),
-                    ),
-                  ),
-                );
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: Column(
+    body: Stack(
+      fit: StackFit.expand,
+      children: <Widget>[
+        Image.asset(
+         bg1,
+          fit: BoxFit.fill,
+        ),
+        FutureBuilder(
+            future: fetchData(),
+            builder: (context, product) {
+              return data== null ?
+               Column(
                       children: <Widget>[
-                        Container(
-                          child: Image.network(
-                 "https://www.1000ftcables.com/images/detailed/2/cat5e-blue.png?t=1536186605",
-                            width: 50,
-                            height: 50,
-                          ),
+                        SizedBox(
+                          height: 20,
                         ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 4,
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.symmetric(
-                            //vertical: 20,
-                            horizontal: 5,
-                          ),
-                          padding: EdgeInsets.all(5),
-                          child: Text(
-                            data[index]["product_code"],
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: Colors.black87,
-                            ),
-                          ),
+                        Icon(
+                          Icons.remove_shopping_cart,
+                          size: 40,
                         ),
-                        Container(
+                        Center(
                           child: Text(
-                            'Total Price:   \$' + data[index]["total"],
+                            'No Orders',
                             style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          child: Text(
-                            'Unit Price:   \$' + data[index]["price"].toString(),
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
+                              fontSize: 25,
                             ),
                           ),
                         ),
                       ],
-                    ),
+                    )
+                  : data.length == 0
+              ? Container(
+                  alignment: AlignmentDirectional.center,
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation(Color(0xffe50914))
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      margin: EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 5,
-                      ),
-                    
-                      child: Icon(Icons.arrow_forward_ios),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
+                )
+              :ListView.builder(
+                      itemCount: data.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                           
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10.0),
+                    boxShadow: [
+                      BoxShadow(
+                          color: appBarColor,
+                          offset: Offset(5, 5),
+                          blurRadius: 10.0,
+                      )
+                    ]),
+                         
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Row(children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Icon(Icons.local_shipping,color: appBarColor,),
+                                  ],
+                                ),
+                                SizedBox(
+                                  width: 30,
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      Text(
+                                        ( 'Product Code:' +data[index]["product_code"]),style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold),
+                                      ),
+                                      // Text(
+                                      //   'Price:\$ ' +
+                                      //       data[index]["subtotal"].toString()
+                                      // ),
+                                      
+                                       Text(
+                                        'Price:' +
+                                            (data[index]["price"].toString()
+                                                    
+                                                
+                                      ),
+                                      
+                                      
+                                       )],
+                                  ),
+                                ),
+                              ]),
+                            ),
+                          ),
+                        );
+                      });
+             
+            }),
+      ],
+    )
+      
     );
+      
+
   }
 }

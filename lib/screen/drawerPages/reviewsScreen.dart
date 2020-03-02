@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cable/widgets/ipaddress.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
@@ -33,6 +34,8 @@ class _ReviewsState extends State<Reviews> {
     return Scaffold(
       appBar: new AppBar(
         title: Text("Reviews"),
+        centerTitle: true,
+        backgroundColor: appBarColor,
       ),
       body: ListView.builder(
         itemCount: review.length,

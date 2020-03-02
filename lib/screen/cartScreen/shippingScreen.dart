@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as card;
 import 'package:flutter_cable/model/CartItem.dart';
 import 'package:flutter_cable/model/user.dart';
 import 'package:flutter_cable/scoped-models/Model.dart';
-import 'package:flutter_cable/screen/userScreen/updateBSAddressScreen.dart';
+import 'package:flutter_cable/screen/cartScreen/payment.dart';
+import 'package:flutter_cable/widgets/ipaddress.dart';
 import 'package:flutter_cable/widgets/preference.dart';
 
 import 'package:http/http.dart' as http;
@@ -10,17 +12,19 @@ import 'package:scoped_model/scoped_model.dart';
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:square_in_app_payments/in_app_payments.dart';
+import 'package:square_in_app_payments/models.dart';
+
 class Checkout extends StatefulWidget {
-  // final MainModel model;
-  // Checkout({this.model});
+
   @override
   _CheckoutState createState() => _CheckoutState();
 }
 
 class _CheckoutState extends State<Checkout> {
   @override
-  Map<String, dynamic> _formData1 = {};
-
+  Map<String, dynamic> _formData = {};
+  List data = [];
   User user;
   MainModel model;
   @override
@@ -29,12 +33,25 @@ class _CheckoutState extends State<Checkout> {
     model = ScopedModel.of<MainModel>(context);
 
     PreferenceManager.getDetails().then((user) {
-      _formData1['user'] = user.toJson();
-      print(_formData1['user']);
-      _formData1['productList'] =
-        model.cartItemList.map((c) => c.toJson()).toList();
+      _formData['user'] = user.toJson();
+      fetchData().then((value) {});
+      print(_formData['user']);
+      _formData['productList'] =
+          model.cartItemList.map((c) => c.toJson()).toList();
     });
     getUserDetails();
+  }
+
+  Future fetchData() async {
+    final response = await http.get(
+        'https://1000ftcables.com/appdata/getuserProfile.php?user_id=${_formData['user_id']}');
+
+    if (response.statusCode == 200) {
+      setState(() {
+        data = json.decode(response.body);
+        _formData['billingdetail'] = data;
+      });
+    }
   }
 
   void getUserDetails() async {
@@ -46,8 +63,9 @@ class _CheckoutState extends State<Checkout> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(model.getCartTotalWeight.toString()),
+        title: Text('Shipping'),
         centerTitle: true,
+        backgroundColor: appBarColor,
       ),
       body: Container(
         child: Column(
@@ -70,10 +88,12 @@ class _CheckoutState extends State<Checkout> {
               ),
             ),
             _CartTotal(
-                _formData1['user']['s_zipcode'].toString(),
-                _formData1['user']['s_country'].toString(),
+                _formData['user']['s_zipcode'].toString(),
+                _formData['user']['s_country'].toString(),
                 model.getCartTotalWeight.toString(),
-                model.getCartSubTotal,_formData1['user']['email'],_formData1['user']['user_id']),
+                model.getCartSubTotal,
+                _formData['user']['email'],
+                _formData['user']['user_id']),
           ],
         ),
       ),
@@ -86,33 +106,43 @@ class _CheckoutState extends State<Checkout> {
       shrinkWrap: true,
       children: <Widget>[
         Container(
-              color: Colors.grey.shade200,
-              padding: EdgeInsets.all(8.0),
-              width: double.infinity,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text("Delivery Address".toUpperCase()),
-                  GestureDetector(
-                    child: Icon(Icons.edit, color: Colors.red),
-                    onTap: () {
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => UpdateData()));
-                    },
+            //color: Colors.grey.shade200,
+            padding: EdgeInsets.all(8.0),
+            width: double.infinity,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Delivery Address :".toUpperCase(),
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold),
                   ),
-                ],
-              )),
+                ),
+                // GestureDetector(
+                //   child: Icon(Icons.edit, color: Colors.blue),
+                //   onTap: () {
+                //     Navigator.push(
+                //         context,
+                //         MaterialPageRoute(
+                //             builder: (context) => UpdateData()));
+                //   },
+                // ),
+              ],
+            )),
         ListTile(
           title: Text(
-            _formData1['user']['s_address'] +
+            _formData['user']['s_address'] +
                 " ," +
-                _formData1['user']['s_city'] +
+                _formData['user']['s_city'] +
                 " ," +
-                _formData1['user']['s_country'],
+                _formData['user']['s_country'],
           ),
-          leading: Icon(Icons.local_shipping),
+          leading: Icon(
+            Icons.local_shipping,
+            color: appBarColor,
+          ),
         ),
         Container(
             margin: EdgeInsets.only(
@@ -120,7 +150,7 @@ class _CheckoutState extends State<Checkout> {
               top: 20,
             ),
             child: Text(
-              "Items",
+              "Items : ",
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -132,120 +162,103 @@ class _CheckoutState extends State<Checkout> {
   }
 
   Widget _cartItemCard(CartItem cartItem) {
-    return Card(
-      child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      margin: const EdgeInsets.only(right: 0, left: 0),
-                      child: Image.network(
-                        'https://www.1000ftcables.com/images/detailed/2/' +
-                            cartItem.image,
-                        width: 90,
-                        height: 90,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 3,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      //margin: EdgeInsets.only(left: 15 ),
-                      child: Text(
-                        cartItem.productName,
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+    return card.Card(
+      child: Padding(
+        padding: const EdgeInsets.all(6.0),
+        child: Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Expanded(
+                  flex: 3,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        //margin: EdgeInsets.only(left: 15 ),
+                        child: Text(
+                          'Name :' + "  " + cartItem.productName,
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Container(
-                            margin: EdgeInsets.only(
-                                // left: 15,
-                                // right: 70,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                              child: Row(
+                            children: <Widget>[
+                              Text(
+                                'Quantity :' +
+                                    "  " +
+                                    ' \$${cartItem.productPrice}',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
                                 ),
-                            child: Row(
-                              children: <Widget>[
-                                Text(
-                                  '  \$${cartItem.productPrice}',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.blue,
+                              ),
+                              Text(
+                                '  X${cartItem.quantity}',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: appBarColor,
+                                ),
+                              ),
+                            ],
+                          )),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                              margin: EdgeInsets.only(),
+                              child: Row(
+                                children: <Widget>[
+                                  Text(
+                                    'Price =',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  '  X${cartItem.quantity}',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
+                                  Text(
+                                    '\$${cartItem.getTotal}',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blue,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            )),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Container(
-                            margin: EdgeInsets.only(
-                                // left: 15,
-                                // right: 70,
-                                ),
-                            child: Row(
-                              children: <Widget>[
-                                Text(
-                                  '=',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                Text(
-                                  '\$${cartItem.getTotal}',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.blue,
-                                  ),
-                                ),
-                              ],
-                            )),
-                      ],
-                    ),
-                  ],
+                                ],
+                              )),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
 class _CartTotal extends StatefulWidget {
-  final String zipcode, country, weight,email, id;
+  final String zipcode, country, weight, email, id;
   final double subtotal;
-  _CartTotal(this.zipcode, this.country, this.weight, this.subtotal,this.email,this.id);
+  _CartTotal(this.zipcode, this.country, this.weight, this.subtotal, this.email,
+      this.id);
   @override
   __CartTotalState createState() => __CartTotalState();
 }
@@ -259,58 +272,70 @@ class __CartTotalState extends State<_CartTotal> {
   void initState() {
     super.initState();
     addShipping().then((value) {});
-  
   }
+
   void _showDialog() {
     // flutter defined function
     showDialog(
-      context: context,
-      builder: (BuildContext context) {
-       
-        return AlertDialog(
-          title: new Text("Your order has been placed"),
-         
-          actions: <Widget>[
-           
-            FlatButton(
-              child: new Text(
-                "View Order",
-                style: TextStyle(
-                    fontSize: 17.0,
-                    color: Colors.red,
-                    fontWeight: FontWeight.w500),
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: new Text("Your Order has been Placed!"),
+            actions: <Widget>[
+              FlatButton(
+                child: new Text(
+                  "Ok",
+                  style: TextStyle(
+                      fontSize: 17.0,
+                      color: Colors.red,
+                      fontWeight: FontWeight.w500),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
-              onPressed: () {
-               Navigator.pop(context, true);
-                  
-                
-              },
-            ),
-          ],
-      );
-      }
-     ) ;}
-  
-
-
-void addData(String total,String subTotal) async {
-  List formData1;
-  MainModel model;
-  print(widget.id);
-  print(widget.email);
-    model = ScopedModel.of<MainModel>(context);
-  formData1 =  model.cartItemList.map((c) => c.toJson()).toList();
- var url = await http.get("http://192.168.10.11/1000ft/orderTotal.php?id=${widget.id}&email=${widget.email}&subTotal=${subTotal}&total=${total}",
-           ); 
-
-        for(int i=0;i<formData1.length;i++){
-          var url = await http.get("http://192.168.10.11/1000ft/order.php?id=${formData1[i]['productId']}&price=${formData1[i]['productPrice']}&quantity=${formData1[i]['quantity']}&code=${formData1[i]['productCode']}&weight=${formData1[i]['weight']}",
-           );
-         
-
-         }
-    
+            ],
+          );
+        });
   }
+
+  void addData(String total, String subTotal) async {
+    List formData1;
+    print('hi m called');
+    MainModel model;
+    double price = (double.parse(total) * 100).toDouble();
+    model = ScopedModel.of<MainModel>(context);
+    formData1 = model.cartItemList.map((c) => c.toJson()).toList();
+    await InAppPayments.setSquareApplicationId('sq0idp-0oO2b7vOtlVNE6IpGna-5Q');
+    await InAppPayments.startCardEntryFlow(
+        onCardNonceRequestSuccess: (CardDetails result) async {
+          try {
+            await getToken(result);
+            await chargeCard(result, price, widget.email);
+            InAppPayments.completeCardEntry(onCardEntryComplete: () async {
+              var url = await http.get(
+                "https://1000ftcables.com/appdata/orderTotal.php?id=${widget.id}&email=${widget.email}&subTotal=${subTotal}&total=${total}",
+              );
+
+              for (int i = 0; i < formData1.length; i++) {
+                var url = await http.get(
+                  "https://1000ftcables.com/appdata/order.php?id=${formData1[i]['productId']}&price=${formData1[i]['productPrice']}&quantity=${formData1[i]['quantity']}&code=${formData1[i]['productCode']}&weight=${formData1[i]['weight']}",
+                );
+              }
+              // checkOut(cartController.items, cartController.totalCartValue);
+              // cartController.clear();
+              Navigator.pop(context);
+              _showDialog();
+              // _paymentSuccessDialog(
+              //     context, sharedPreferences.getString('Customer_id'));
+            });
+          } catch (ex) {
+            InAppPayments.showCardNonceProcessingError(ex.toString());
+          }
+        },
+        onCardEntryCancel: () {});
+  }
+
   Map<String, dynamic> rates = {};
   Future addShipping() async {
     var headers = {'charset': 'utf-8'};
@@ -416,14 +441,15 @@ void addData(String total,String subTotal) async {
                   width: double.infinity,
                   child: MaterialButton(
                       height: 50.0,
-                      color: Colors.blue,
+                      color: appBarColor,
                       child: Text(
                         "Place Order".toUpperCase(),
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () => {
-                        addData(getTotal.toString(), widget.subtotal.toString()),
-                      }),
+                            addData(getTotal.toString(),
+                                widget.subtotal.toString()),
+                          }),
                 )
               ],
             ),

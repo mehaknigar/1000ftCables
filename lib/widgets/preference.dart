@@ -10,10 +10,10 @@ class PreferenceManager {
     await sharedPreferences.setString("email", user.email);
     await sharedPreferences.setString("password", user.password.toString());
     await sharedPreferences.setString("s_phone", user.s_phone);
-    await sharedPreferences.setString("s_address", user.s_address);
-    await sharedPreferences.setString("s_city", user.s_city);
-    await sharedPreferences.setString("s_state", user.s_state);
-    await sharedPreferences.setString("s_country", user.s_country);
+    await sharedPreferences.setString("s_address", user.s_address).toString();
+    await sharedPreferences.setString("s_city", user.s_city).toString();
+    await sharedPreferences.setString("s_state", user.s_state.toString());
+    await sharedPreferences.setString("s_country", user.s_country).toString();
     await sharedPreferences.setString("s_zipcode", user.s_zipcode).toString();
     
   }

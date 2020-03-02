@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cable/widgets/ipaddress.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:io' show Platform;
 
@@ -124,6 +125,8 @@ class _FollowusState extends State<Followus> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Follow us"),
+        centerTitle: true,
+        backgroundColor: appBarColor,
       ),
       body: new Stack(
         children: <Widget>[
