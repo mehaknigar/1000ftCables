@@ -34,7 +34,7 @@ class _CheckoutState extends State<Checkout> {
 
     PreferenceManager.getDetails().then((user) {
       _formData['user'] = user.toJson();
-      fetchData().then((value) {});
+     // fetchData().then((value) {});
       print(_formData['user']);
       _formData['productList'] =
           model.cartItemList.map((c) => c.toJson()).toList();
@@ -42,17 +42,17 @@ class _CheckoutState extends State<Checkout> {
     getUserDetails();
   }
 
-  Future fetchData() async {
-    final response = await http.get(
-        'https://1000ftcables.com/appdata/getuserProfile.php?user_id=${_formData['user_id']}');
+  // Future fetchData() async {
+  //   final response = await http.get(
+  //       'https://1000ftcables.com/appdata/getuserProfile.php?user_id=${_formData['user_id']}');
 
-    if (response.statusCode == 200) {
-      setState(() {
-        data = json.decode(response.body);
-        _formData['billingdetail'] = data;
-      });
-    }
-  }
+  //   if (response.statusCode == 200) {
+  //     setState(() {
+  //       data = json.decode(response.body);
+  //       _formData['billingdetail'] = data;
+  //     });
+  //   }
+  // }
 
   void getUserDetails() async {
     user = await PreferenceManager.getDetails();

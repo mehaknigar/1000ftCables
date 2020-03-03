@@ -133,89 +133,103 @@ class _FollowusState extends State<Followus> {
           new Container(
             decoration: new BoxDecoration(
               image: new DecorationImage(
-                  image: new AssetImage("Assets/images/BG.png"),
-                  fit: BoxFit.cover),
+                  image: new AssetImage(bg1), fit: BoxFit.cover),
             ),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Container(
-                margin: const EdgeInsets.only(
-                  top: 50,
-                  left: 30,
-                  right: 30,
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    launchfacebook();
-                  },
-                  child: Image.asset(
-                    'Assets/images/facebook.png',
-                  ),
-                ),
+          Center(
+            child: Text(
+              'Follow Us ',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 35,
+                fontStyle: FontStyle.italic
               ),
-              Container(
-                margin: const EdgeInsets.only(
-                  left: 30,
-                  right: 30,
-                ),
-                width: double.infinity,
-                child: GestureDetector(
-                  onTap: () {
-                    _launchURL();
-                  },
-                  child: Image.asset(
-                    'Assets/images/YouTube.png',
-                  ),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(
-                  left: 30,
-                  right: 30,
-                ),
-                width: double.infinity,
-                child: GestureDetector(
-                  onTap: () {
-                    launchTwitter();
-                  },
-                  child: Image.asset(
-                    'Assets/images/twitter.png',
-                  ),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(
-                  left: 30,
-                  right: 30,
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    launchGPlus();
-                  },
-                  child: Image.asset(
-                    'Assets/images/google Plus.png',
-                  ),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(
-                  bottom: 50,
-                  left: 30,
-                  right: 30,
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    launchInsta();
-                  },
-                  child: Image.asset(
-                    'Assets/images/instagram.png',
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
+          Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: CircleAvatar(
+                          radius: 60,
+                          backgroundColor: Colors.white,
+                          child: GestureDetector(
+                            onTap: () {
+                              launchTwitter();
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.asset(
+                                'Assets/images/twitter.png',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: CircleAvatar(
+                          radius: 60,
+                          backgroundColor: Colors.white,
+                          child: GestureDetector(
+                            onTap: () {
+                              launchInsta();
+                            },
+                            child: Image.asset(
+                              'Assets/images/instagram.png',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: CircleAvatar(
+                          radius: 60,
+                          backgroundColor: Colors.white,
+                          child: GestureDetector(
+                            onTap: () {
+                              _launchURL();
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.asset(
+                                'Assets/images/youtube.png',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: CircleAvatar(
+                            radius: 60,
+                            backgroundColor: Colors.white,
+                            child: GestureDetector(
+                              onTap: () {
+                                launchfacebook();
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Image.asset(
+                                  'Assets/images/facebook.png',
+                                ),
+                              ),
+                            ),
+                          )),
+                    ],
+                  ),
+                ]),
+          )
         ],
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cable/widgets/ipaddress.dart';
 //import 'package:flutter_cable/widgets/cart.dart';
 //import 'package:youtube_player/youtube_player.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -37,13 +38,15 @@ class _BlogState extends State<Blog> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Installation Guide"),
+        backgroundColor: appBarColor,
+        centerTitle: true,
       ),
       body: new Stack(
         children: <Widget>[
           new Container(
             decoration: new BoxDecoration(
               image: new DecorationImage(
-                  image: new AssetImage("Assets/images/BG.png"),
+                  image: new AssetImage(bg1),
                   fit: BoxFit.cover),
             ),
           ),
@@ -68,25 +71,25 @@ class _BlogState extends State<Blog> {
                   ),
                 ),
               ),
-              Container(
-                height: 150,
-                margin: const EdgeInsets.only(
-                  top: 50,
-                ),
-                width: double.infinity,
-                child: Container(
-                  child: GestureDetector(
-                    // onTap: () {
-                    //   navigatetoshopnow(context);
-                    // },
-                    child: Image.asset(
-                      'Assets/images/information.png',
-                      // width: 400,
-                      // height: 150,
-                    ),
-                  ),
-                ),
-              ),
+              // Container(
+              //   height: 150,
+              //   margin: const EdgeInsets.only(
+              //     top: 50,
+              //   ),
+              //   width: double.infinity,
+              //   child: Container(
+              //     child: GestureDetector(
+              //       // onTap: () {
+              //       //   navigatetoshopnow(context);
+              //       // },
+              //       child: Image.asset(
+              //         'Assets/images/information.png',
+              //         // width: 400,
+              //         // height: 150,
+              //       ),
+              //     ),
+              //   ),
+            //  ),
             ],
           ),
         ],
